@@ -67,7 +67,7 @@ doc.corpus <- tm_map(doc.corpus, stripWhitespace)
 doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("spanish")) 
 doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("english"))  
 # Palabras especificas
-# revisar, añadirlas a un fichero
+*# revisar, añadirlas a un fichero
 doc.corpus <- tm_map(doc.corpus, removeWords, c("vomito", "enfermedad","sindrome","asociacion","marfan","paramo","gracias"))   
 # sustituimos palabras derivadas 
 # OJO --> por ejemplo abrazo pone abraz, ver cómo queda al final y si nos interesa hacerlo
@@ -77,7 +77,7 @@ doc.corpus <- tm_map(doc.corpus, stemDocument, language="spanish")
 # Indicamos que nuestro corpus es un texto
 doc.corpus <- tm_map(doc.corpus, PlainTextDocument) 
 
-
+*
 # Creamos una matriz de terminos - documentos
 TDM <- TermDocumentMatrix(doc.corpus)
 
@@ -87,7 +87,7 @@ TDM <- TermDocumentMatrix(doc.corpus)
 # (2,inf) nos indica la longitud minima de las palabras, por defecto es 3
 TDM <- TermDocumentMatrix(doc.corpus, 
        control = list(wordLengths = c(3, Inf))) 
-
+*
 # Veamos que tamaño tiene
 dim(TDM)
 
@@ -137,6 +137,10 @@ wordcloud(palab_frec.df$word, palab_frec.df$freq, min.freq=150, random.color=TRU
 
 
 ```
-
-
+******
+#correlaciones entre palabras
+******
+```{r}
+findAssocs(TDM, c("asociacion"), corlimit=0.19)
+```
  
