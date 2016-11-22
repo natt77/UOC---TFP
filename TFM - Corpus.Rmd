@@ -30,7 +30,7 @@ nombreruta <-getwd()
 fdatos <- data.frame()
 file.names <- dir(nombreruta, pattern = ".csv")
 for(i in 1:length(file.names)){
-  file <- read.csv(file.names[i], header = TRUE, stringsAsFactors = FALSE,encoding = "UTF-8")
+  file <- read.csv(file.names[i], header = TRUE, stringsAsFactors = FALSE,encoding = "ANSII")
   fdatos <- rbind(fdatos, file)
 }
 
