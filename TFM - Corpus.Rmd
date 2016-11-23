@@ -1,4 +1,4 @@
-﻿---
+---
 title: "TFM-Corpus"
 output: html_document
 ---
@@ -8,14 +8,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ******
-#Cargamos librer�as y leemos ficheros Facebook
+#Cargamos librerías y leemos ficheros Facebook
 ******
 
 
 ```{r,eval=TRUE,echo=TRUE,warning=FALSE, message=FALSE}
-# Para la función Corpus()
+# Para la funciÃ³n Corpus()
 library(tm)
-# Para la función rbind.fill
+# Para la funciÃ³n rbind.fill
 library(plyr)
 library(SnowballC)
 # Para los graficos
@@ -47,30 +47,30 @@ linea = iconv(linea, to="ASCII//TRANSLIT")
 
 
 ******
-#Creaci�n del corpus de Facebook
+#Creación del corpus de Facebook
 ******
 
 ```{r}
 #creamos corpus
 doc.corpus <- Corpus(VectorSource(linea))
 
-# Vamos a ir eliminando/modificando el corpus para quedarnos sólo con las palabras necesarias 
-# Transformamos a minúsculas
+# Vamos a ir eliminando/modificando el corpus para quedarnos sÃ³lo con las palabras necesarias 
+# Transformamos a minÃºsculas
 doc.corpus <- tm_map(doc.corpus, content_transformer(tolower)) 
-# Quitamos la puntuación
+# Quitamos la puntuaciÃ³n
 doc.corpus <- tm_map(doc.corpus, removePunctuation) 
-# Quitamos números
+# Quitamos nÃºmeros
 doc.corpus <- tm_map(doc.corpus, removeNumbers)
 # Quitamos espacios en blanco
 doc.corpus <- tm_map(doc.corpus, stripWhitespace)
-# Quitamos palabras sin valor analitico, en ingles y español
+# Quitamos palabras sin valor analitico, en ingles y espaÃ±ol
 doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("spanish")) 
 doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("english"))  
 # Palabras especificas
-# revisar, a�adirlas a un fichero
+# revisar, añadirlas a un fichero
 doc.corpus <- tm_map(doc.corpus, removeWords, c("vomitos", "enfermedad","sindrome","marfan"))   
 # sustituimos palabras derivadas 
-# OJO --> por ejemplo abrazo pone abraz, ver c�mo queda al final y si nos interesa hacerlo
+# OJO --> por ejemplo abrazo pone abraz, ver cómo queda al final y si nos interesa hacerlo
 doc.corpus <- tm_map(doc.corpus, stemDocument, language="spanish")
 
 
@@ -88,7 +88,7 @@ TDM <- TermDocumentMatrix(doc.corpus)
 TDM <- TermDocumentMatrix(doc.corpus, 
        control = list(wordLengths = c(3, Inf))) 
 
-# Veamos que tama�o tiene
+# Veamos que tamaño tiene
 dim(TDM)
 
 inspect(TDM[1:20,1:8])
@@ -96,7 +96,7 @@ inspect(TDM[1:20,1:8])
 
 
 # Reducimos la matriz
-# cuanto mayor ponemos el coeficiente más palabras tenemos
+# cuanto mayor ponemos el coeficiente mÃ¡s palabras tenemos
 # probar con varios valores
 TDM <- removeSparseTerms(TDM, 0.99)
 #dtms
@@ -120,7 +120,7 @@ palab_frec.df <- data.frame(word=names(frecuencia), freq=frecuencia)
 
 #visualizamos una grafica con la frecuenca de las palabras
 
-#Seleccionamos sólo las que aparecen mas de 200 veces
+#Seleccionamos sÃ³lo las que aparecen mas de 200 veces
 #probar varios valores
 filtrado <- data.frame(subset(palab_frec.df, freq>120))
 
@@ -139,13 +139,13 @@ wordcloud(palab_frec.df$word, palab_frec.df$freq, min.freq=120, random.color=TRU
 ```
 
 ******
-#Creaci�n del corpus del Dec�logo
+#Creación del corpus del Decálogo
 ******
 
 
 ```{r}
 
-#Vamos a leer el dec�logo de prioridades, y de forma an�logo a lo que hemos hecho para los datos de Facebook crearemos un corpus y una nube de palabras
+#Vamos a leer el decálogo de prioridades, y de forma análogo a lo que hemos hecho para los datos de Facebook crearemos un corpus y una nube de palabras
 
 decalogo <- read.table("decalogodeprioridades.txt", header = FALSE, stringsAsFactors = FALSE,encoding = "UTF-8", sep="\t" )
 
@@ -154,22 +154,22 @@ decalogo <- read.table("decalogodeprioridades.txt", header = FALSE, stringsAsFac
 #creamos corpus
 doc.corpus.dec <- Corpus(VectorSource(decalogo))
 
-# Vamos a ir eliminando/modificando el corpus para quedarnos sólo con las palabras necesarias 
-# Transformamos a minúsculas
+# Vamos a ir eliminando/modificando el corpus para quedarnos sÃ³lo con las palabras necesarias 
+# Transformamos a minÃºsculas
 doc.corpus.dec <- tm_map(doc.corpus.dec, content_transformer(tolower)) 
-# Quitamos la puntuación
+# Quitamos la puntuaciÃ³n
 doc.corpus.dec <- tm_map(doc.corpus.dec, removePunctuation) 
-# Quitamos números
+# Quitamos nÃºmeros
 doc.corpus.dec <- tm_map(doc.corpus.dec, removeNumbers)
 # Quitamos espacios en blanco
 doc.corpus.dec <- tm_map(doc.corpus.dec, stripWhitespace)
-# Quitamos palabras sin valor analitico, en espa�ol
+# Quitamos palabras sin valor analitico, en español
 doc.corpus.dec <- tm_map(doc.corpus.dec, removeWords, stopwords("spanish")) 
 # Palabras especificas
-# revisar, a�adirlas a un fichero
+# revisar, añadirlas a un fichero
 #doc.corpus <- tm_map(doc.corpus, removeWords, c("vomito", "enfermedad","sindrome","asociacion","marfan","paramo","gracias"))   
 # sustituimos palabras derivadas 
-# OJO --> por ejemplo abrazo pone abraz, ver c�mo queda al final y si nos interesa hacerlo
+# OJO --> por ejemplo abrazo pone abraz, ver cómo queda al final y si nos interesa hacerlo
 #doc.corpus <- tm_map(doc.corpus, stemDocument, language="spanish")
 
 
@@ -187,12 +187,12 @@ TDM.dec <- TermDocumentMatrix(doc.corpus.dec)
 TDM.dec <- TermDocumentMatrix(doc.corpus.dec, 
        control = list(wordLengths = c(3, Inf))) 
 
-# Veamos que tama�o tiene
+# Veamos que tamaño tiene
 dim(TDM.dec)
 
 
 # Reducimos la matriz
-# cuanto mayor ponemos el coeficiente más palabras tenemos
+# cuanto mayor ponemos el coeficiente mÃ¡s palabras tenemos
 # probar con varios valores
 #TDM <- removeSparseTerms(TDM, 0.99)
 #dtms
@@ -208,13 +208,13 @@ palab_frec_dec.df <- data.frame(word=names(frecuencia_dec), freq=frecuencia_dec)
 ```
 
 ******
-# Visualizaciones dec�logo
+# Visualizaciones decálogo
 ******
 ```{r}
 
 #visualizamos una grafica con la frecuenca de las palabras
 
-#Seleccionamos s�lo las que aparecen mas de 4 veces
+#Seleccionamos sólo las que aparecen mas de 4 veces
 #probar varios valores
 filtrado_dec <- data.frame(subset(palab_frec_dec.df, freq>4))
 
@@ -238,9 +238,9 @@ wordcloud(palab_frec_dec.df$word, palab_frec_dec.df$freq, min.freq=4, random.col
 ```{r}
 
 #comentario.quitar
-#calcular el log-likelihood (LL) ratio de cada palabra. Despu�s ordenar�a los valores LL resultantes. Los valores m�s elevados de LL representan palabras que tienen la diferencia de frecuencia relativa m�s significativa entre los dos textos. De esta manera, podemos ver las palabras m�s indicativas (o caracter�sticas) de los textos, en la parte superior de la lista. Las palabras que aparecen con frecuencias relativas aproximadamente similares en los dos textos aparecen m�s abajo en la lista.
+#calcular el log-likelihood (LL) ratio de cada palabra. Después ordenaría los valores LL resultantes. Los valores más elevados de LL representan palabras que tienen la diferencia de frecuencia relativa más significativa entre los dos textos. De esta manera, podemos ver las palabras más indicativas (o características) de los textos, en la parte superior de la lista. Las palabras que aparecen con frecuencias relativas aproximadamente similares en los dos textos aparecen más abajo en la lista.
 
-#Partimos de los 2 df que ten�amos con las palabras y frecuencias de Facebook (palab_frec) y del dec�logo (palab_frec_dec)
+#Partimos de los 2 df que teníamos con las palabras y frecuencias de Facebook (palab_frec) y del decálogo (palab_frec_dec)
 
 #renombramos las variables de frecuencia para que sean distintas
 
