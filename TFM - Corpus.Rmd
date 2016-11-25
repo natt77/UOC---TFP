@@ -110,7 +110,7 @@ inspect(TDM[1:20,1:8])
 # Reducimos la matriz
 # cuanto mayor ponemos el coeficiente mÃ¡s palabras tenemos
 # probar con varios valores
-TDM <- removeSparseTerms(TDM, 0.99)
+TDM <- removeSparseTerms(TDM, 0.999)
 #dtms
 inspect(TDM[1:5,1:5])
 
