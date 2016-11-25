@@ -179,27 +179,18 @@ doc.corpus.dec <- tm_map(doc.corpus.dec, stripWhitespace)
 doc.corpus.dec <- tm_map(doc.corpus.dec, removeWords, stopwords("spanish")) 
 # Palabras especificas
 # revisar, añadirlas a un fichero
-doc.corpus <- tm_map(doc.corpus, removeWords, c("vomito", "enfermedad","sindrome","asociacion","marfan"))   
+doc.corpus.dec <- tm_map(doc.corpus.dec, removeWords, c("vomito", "enfermedad","sindrome","asociacion","marfan"))   
 
 # sustituimos palabras derivadas 
 # primero creamos una copia, que usaremos como diccionario
-doc.corpus.copy <- doc.corpus 
+doc.corpus.copy <- doc.corpus.dec 
 # sustituimos
-doc.corpus <- tm_map(doc.corpus, stemDocument, language="spanish")
-
-#creamoos una función para completar
-stemCompletion2 <- function(x, dictionary){
-  x <- unlist(strsplit(as.character(x), " "))
-  # Esto es para que los espacios no se sustituyan por palabras
-  x <- x[x != ""]
-  x <- stemCompletion(x, dictionary=dictionary)
-  x <- paste(x, sep="", collapse=" ")
-  PlainTextDocument(stripWhitespace(x))}
+doc.corpus.dec <- tm_map(doc.corpus.dec, stemDocument, language="spanish")
 
 #Llamamos a la funcion para completar
-doc.corpus <- lapply(doc.corpus, stemCompletion2, dictionary=doc.corpus.copy)
+doc.corpus.dec <- lapply(doc.corpus.dec, stemCompletion2, dictionary=doc.corpus.copy)
 # Transformamos de lista a corpus 
-doc.corpus <- as.VCorpus(doc.corpus)
+doc.corpus.dec <- as.VCorpus(doc.corpus.dec)
 
 # Indicamos que nuestro corpus es un texto
 doc.corpus.dec <- tm_map(doc.corpus.dec, PlainTextDocument) 
