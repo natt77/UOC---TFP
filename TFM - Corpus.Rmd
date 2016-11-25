@@ -134,7 +134,7 @@ palab_frec.df <- data.frame(word=names(frecuencia), freq=frecuencia)
 
 #Seleccionamos sÃ³lo las que aparecen mas de 200 veces
 #probar varios valores
-filtrado <- data.frame(subset(palab_frec.df, freq>120))
+filtrado <- data.frame(subset(palab_frec.df, freq>15))
 
 # histograma de frecuencias
 p <- ggplot(filtrado, aes(word, freq))    
@@ -145,7 +145,7 @@ p
 
 #nube de palabras
 
-wordcloud(palab_frec.df$word, palab_frec.df$freq, min.freq=120, random.color=TRUE, colors=rainbow(7))
+wordcloud(palab_frec.df$word, palab_frec.df$freq, min.freq=15, random.color=TRUE, colors=rainbow(7))
 
 
 ```
