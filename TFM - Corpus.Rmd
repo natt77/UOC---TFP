@@ -54,7 +54,7 @@ linea = iconv(linea, to="ASCII//TRANSLIT")
 #creamos corpus
 doc.corpus <- Corpus(VectorSource(linea))
 
-# Vamos a ir eliminando/modificando el corpus para quedarnos sÃ³lo con las palabras necesarias 
+# Vamos a ir eliminando/modificando el corpus para quedarnos solo con las palabras necesarias 
 # Transformamos a minÃºsculas
 doc.corpus <- tm_map(doc.corpus, content_transformer(tolower)) 
 # Quitamos la puntuaciÃ³n
@@ -70,18 +70,30 @@ doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("english"))
 # revisar, añadirlas a un fichero
 doc.corpus <- tm_map(doc.corpus, removeWords, c("vomitos", "enfermedad","sindrome","marfan"))   
 # sustituimos palabras derivadas 
-# OJO --> por ejemplo abrazo pone abraz, ver cómo queda al final y si nos interesa hacerlo
+# primero creamos una copia, que usaremos como diccionario
+doc.corpus.copy <- doc.corpus 
+#sustituimos
 doc.corpus <- tm_map(doc.corpus, stemDocument, language="spanish")
 
+#creamoos una función para completar
+stemCompletion2 <- function(x, dictionary){
+  x <- unlist(strsplit(as.character(x), " "))
+  # Esto es para que los espacios no se sustituyan por palabras
+  x <- x[x != ""]
+  x <- stemCompletion(x, dictionary=dictionary)
+  x <- paste(x, sep="", collapse=" ")
+  PlainTextDocument(stripWhitespace(x))}
+
+#Llamamos a la funcion para completar
+doc.corpus <- lapply(doc.corpus, stemCompletion2, dictionary=doc.corpus.copy)
+# Transformamos de lista a corpus 
+doc.corpus <- as.VCorpus(doc.corpus)
 
 # Indicamos que nuestro corpus es un texto
 doc.corpus <- tm_map(doc.corpus, PlainTextDocument) 
 
-
 # Creamos una matriz de terminos - documentos
 TDM <- TermDocumentMatrix(doc.corpus)
-
-
 
 # Para evitar tener palabras que son muy cortas 
 # (2,inf) nos indica la longitud minima de las palabras, por defecto es 3
