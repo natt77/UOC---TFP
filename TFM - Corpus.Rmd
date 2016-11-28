@@ -144,9 +144,7 @@ p
 
 
 #nube de palabras
-
-wordcloud(palab_frec.df$word, palab_frec.df$freq, min.freq=15, random.color=TRUE, colors=rainbow(7))
-
+wordcloud(palab_frec.df$word, palab_frec.df$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32), max.words=150, rot.per=0)
 
 ```
 
@@ -245,7 +243,7 @@ p1
 
 #nube de palabras
 
-wordcloud(palab_frec_dec.df$word, palab_frec_dec.df$freq, min.freq=4, random.color=TRUE, colors=rainbow(7))
+wordcloud(palab_frec_dec.df$word, palab_frec_dec.df$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32), max.words=150, rot.per=0)
 
 ```
 
@@ -266,20 +264,28 @@ names(palab_frec.df)[2] <- "frec1"
 names(palab_frec_dec.df)[2] <- "frec2"
 
 
+#Obtenemos solo las palabras comunes a los dos ficheros
 unido <- join(palab_frec.df, palab_frec_dec.df, by="word" , type="inner")
 
+#calculamos el numero total de palabras de cada corpus
 c <- sum(unido$frec1)
 d <- sum(unido$frec2)
 
+#frecuencias de cada palabra en cada corpus
 a <- unido$frec1
 b <- unido$frec2
 
-unido$LL <- 2 * ( a*log(a*(c+d)/c*(a+b)) + b*log(b*(c+d)/d*(a+b)) )
+#Realizamos los cálculos finales
+E1=c*(a+b)/(c+d)
+E2=d*(a+b)/(c+d)
 
-unido <- cbind(unido, unido$LL)
+unido$LL <- 2 * ( a*log(a/E1) + b*log(b/E2) )
 
+#Mostramos las palabras con un LL más alto
 head(unido)
 
+#Mostramos las palabras con un LL más bajo
+tail(unido)
 
 ```
 
