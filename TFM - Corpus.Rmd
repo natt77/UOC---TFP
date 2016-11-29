@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r,eval=TRUE,echo=TRUE,warning=FALSE, message=FALSE}
-# Para la funciÃ³n Corpus()
+# Para la funcion Corpus()
 library(tm)
 # Para la funciÃ³n rbind.fill
 library(plyr)
@@ -28,7 +28,7 @@ nombreruta <-getwd()
 
 #leemos todos los ficheros con datos de Facebook
 fdatos <- data.frame()
-file.names <- dir(nombreruta, pattern = ".csv")
+file.names <- dir(nombreruta, pattern = "ANSII.csv")
 for(i in 1:length(file.names)){
   file <- read.csv(file.names[i], header = TRUE, stringsAsFactors = FALSE,encoding = "ANSII")
   fdatos <- rbind(fdatos, file)
@@ -57,9 +57,9 @@ doc.corpus <- Corpus(VectorSource(linea))
 # Vamos a ir eliminando/modificando el corpus para quedarnos solo con las palabras necesarias 
 # Transformamos a minÃºsculas
 doc.corpus <- tm_map(doc.corpus, content_transformer(tolower)) 
-# Quitamos la puntuaciÃ³n
+# Quitamos la puntuacion
 doc.corpus <- tm_map(doc.corpus, removePunctuation) 
-# Quitamos nÃºmeros
+# Quitamos numeros
 doc.corpus <- tm_map(doc.corpus, removeNumbers)
 # Quitamos espacios en blanco
 doc.corpus <- tm_map(doc.corpus, stripWhitespace)
@@ -70,22 +70,24 @@ doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("english"))
 # revisar, añadirlas a un fichero
 doc.corpus <- tm_map(doc.corpus, removeWords, c("vomitos", "enfermedad","sindrome","marfan"))   
 # sustituimos palabras derivadas 
+# **** Esta parte de momento la dejamos comentada ya que necesita revisión
 # primero creamos una copia, que usaremos como diccionario
-doc.corpus.copy <- doc.corpus 
+#doc.corpus.copy <- doc.corpus 
 #sustituimos
-doc.corpus <- tm_map(doc.corpus, stemDocument, language="spanish")
+#doc.corpus <- tm_map(doc.corpus, stemDocument, language="spanish")
 
 #creamoos una función para completar
-stemCompletion2 <- function(x, dictionary){
-  x <- unlist(strsplit(as.character(x), " "))
+#stemCompletion2 <- function(x, dictionary){
+#  x <- unlist(strsplit(as.character(x), " "))
   # Esto es para que los espacios no se sustituyan por palabras
-  x <- x[x != ""]
-  x <- stemCompletion(x, dictionary=dictionary)
-  x <- paste(x, sep="", collapse=" ")
-  PlainTextDocument(stripWhitespace(x))}
+#  x <- x[x != ""]
+#  x <- stemCompletion(x, dictionary=dictionary)
+#  x <- paste(x, sep="", collapse=" ")
+#  PlainTextDocument(stripWhitespace(x))}
 
 #Llamamos a la funcion para completar
-doc.corpus <- lapply(doc.corpus, stemCompletion2, dictionary=doc.corpus.copy)
+#doc.corpus <- lapply(doc.corpus, stemCompletion2, #dictionary=doc.corpus.copy)
+#***************************
 # Transformamos de lista a corpus 
 doc.corpus <- as.VCorpus(doc.corpus)
 
@@ -132,9 +134,9 @@ palab_frec.df <- data.frame(word=names(frecuencia), freq=frecuencia)
 
 #visualizamos una grafica con la frecuenca de las palabras
 
-#Seleccionamos sÃ³lo las que aparecen mas de 200 veces
+#Seleccionamos solo las que aparecen mas de 150 veces
 #probar varios valores
-filtrado <- data.frame(subset(palab_frec.df, freq>15))
+filtrado <- data.frame(subset(palab_frec.df, freq>150))
 
 # histograma de frecuencias
 p <- ggplot(filtrado, aes(word, freq))    
@@ -144,8 +146,8 @@ p
 
 
 #nube de palabras
-wordcloud(palab_frec.df$word, palab_frec.df$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32), max.words=150, rot.per=0)
-
+wordcloud(palab_frec.df$word, palab_frec.df$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+max.words=45, rot.per=0)
 ```
 
 ******
@@ -159,15 +161,13 @@ wordcloud(palab_frec.df$word, palab_frec.df$freq, random.color=FALSE,random.orde
 
 decalogo <- read.table("decalogodeprioridades.txt", header = FALSE, stringsAsFactors = FALSE,encoding = "UTF-8", sep="\t" )
 
-```
-```{r}
 #creamos corpus
 doc.corpus.dec <- Corpus(VectorSource(decalogo))
 
 # Vamos a ir eliminando/modificando el corpus para quedarnos sÃ³lo con las palabras necesarias 
-# Transformamos a minÃºsculas
+# Transformamos a minusculas
 doc.corpus.dec <- tm_map(doc.corpus.dec, content_transformer(tolower)) 
-# Quitamos la puntuaciÃ³n
+# Quitamos la puntuacionn
 doc.corpus.dec <- tm_map(doc.corpus.dec, removePunctuation) 
 # Quitamos nÃºmeros
 doc.corpus.dec <- tm_map(doc.corpus.dec, removeNumbers)
@@ -180,15 +180,16 @@ doc.corpus.dec <- tm_map(doc.corpus.dec, removeWords, stopwords("spanish"))
 doc.corpus.dec <- tm_map(doc.corpus.dec, removeWords, c("vomito", "enfermedad","sindrome","asociacion","marfan"))   
 
 # sustituimos palabras derivadas 
+# **** Esta parte de momento la dejamos comentada ya que necesita revisión
 # primero creamos una copia, que usaremos como diccionario
-doc.corpus.copy <- doc.corpus.dec 
+#doc.corpus.copy <- doc.corpus.dec 
 # sustituimos
-doc.corpus.dec <- tm_map(doc.corpus.dec, stemDocument, language="spanish")
+#doc.corpus.dec <- tm_map(doc.corpus.dec, stemDocument, language="spanish")
 
 #Llamamos a la funcion para completar
-doc.corpus.dec <- lapply(doc.corpus.dec, stemCompletion2, dictionary=doc.corpus.copy)
+#doc.corpus.dec <- lapply(doc.corpus.dec, stemCompletion2, dictionary=doc.corpus.copy)
 # Transformamos de lista a corpus 
-doc.corpus.dec <- as.VCorpus(doc.corpus.dec)
+#doc.corpus.dec <- as.VCorpus(doc.corpus.dec)
 
 # Indicamos que nuestro corpus es un texto
 doc.corpus.dec <- tm_map(doc.corpus.dec, PlainTextDocument) 
@@ -205,15 +206,6 @@ TDM.dec <- TermDocumentMatrix(doc.corpus.dec,
 
 # Veamos que tamaño tiene
 dim(TDM.dec)
-
-
-# Reducimos la matriz
-# cuanto mayor ponemos el coeficiente mÃ¡s palabras tenemos
-# probar con varios valores
-#TDM <- removeSparseTerms(TDM, 0.99)
-#dtms
-#inspect(TDM[1:5,1:5])
-
 
 
 #muestra matriz de terminos
@@ -243,7 +235,10 @@ p1
 
 #nube de palabras
 
-wordcloud(palab_frec_dec.df$word, palab_frec_dec.df$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32), max.words=150, rot.per=0)
+wordcloud(palab_frec_dec.df$word, palab_frec_dec.df$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+max.words=45, rot.per=0)
+
+
 
 ```
 
@@ -251,7 +246,10 @@ wordcloud(palab_frec_dec.df$word, palab_frec_dec.df$freq, random.color=FALSE,ran
 # Comparativa entre palabras 
 ******
 
+Vamos a calcular el log-likelihood (LL) ratio de cada palabra y mostrarlo ordenado. Las primeras que aparezcan nos indicarán mayores diferencias de ratio, es decir, mayor diferencia relativa entre las apariciones entre ambos textos. De forma similar mostraremos las últimas en aparecer, que mostraran las que tiene ratios similares.
+
 ```{r}
+
 
 #Partimos de los 2 df que teníamos con las palabras y frecuencias de Facebook (palab_frec) y del decálogo (palab_frec_dec)
 
@@ -259,7 +257,6 @@ wordcloud(palab_frec_dec.df$word, palab_frec_dec.df$freq, random.color=FALSE,ran
 
 names(palab_frec.df)[2] <- "frec1"
 names(palab_frec_dec.df)[2] <- "frec2"
-
 
 #Obtenemos solo las palabras comunes a los dos ficheros
 unido <- join(palab_frec.df, palab_frec_dec.df, by="word" , type="inner")
