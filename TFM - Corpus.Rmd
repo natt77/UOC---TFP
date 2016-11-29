@@ -253,9 +253,6 @@ wordcloud(palab_frec_dec.df$word, palab_frec_dec.df$freq, random.color=FALSE,ran
 
 ```{r}
 
-#comentario.quitar
-#calcular el log-likelihood (LL) ratio de cada palabra. Después ordenaría los valores LL resultantes. Los valores más elevados de LL representan palabras que tienen la diferencia de frecuencia relativa más significativa entre los dos textos. De esta manera, podemos ver las palabras más indicativas (o características) de los textos, en la parte superior de la lista. Las palabras que aparecen con frecuencias relativas aproximadamente similares en los dos textos aparecen más abajo en la lista.
-
 #Partimos de los 2 df que teníamos con las palabras y frecuencias de Facebook (palab_frec) y del decálogo (palab_frec_dec)
 
 #renombramos las variables de frecuencia para que sean distintas
