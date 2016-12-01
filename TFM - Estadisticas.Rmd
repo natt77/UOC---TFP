@@ -10,16 +10,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ******
-# An·lisis por tipo de contenido
+# An√°lisis por tipo de contenido
 ******
 
 Leemos fichero de datos y seleccionamos columnas necesarias
 
 ```{r}
 
-# Para la funciÛn Corpus()
+# Para la funci√≥n Corpus()
 library(tm)
-# Para la funciÛn rbind.fill
+# Para la funci√≥n rbind.fill
 library(plyr)
 library(SnowballC)
 # Para los graficos
@@ -56,7 +56,7 @@ datos$shares_count_fb <- as.numeric(datos$shares_count_fb)
 datos$engagement_fb <- as.numeric(datos$engagement_fb)
 
 
-#Observamos que hay valores que se han introducido como NA para las columnas numÈricas, miramos que esta ocurriendo
+#Observamos que hay valores que se han introducido como NA para las columnas num√©ricas, miramos que esta ocurriendo
 
 which(is.na(datos$likes_count_fb))
 
@@ -73,7 +73,7 @@ datos <- datos[-1954,]
 
 ```
 
-Vamos a calcular la media de cada uno de los contadores en funciÛn del tipo de contenido, y a mostrarlo visualmente
+Vamos a calcular la media de cada uno de los contadores en funci√≥n del tipo de contenido, y a mostrarlo visualmente
 
 ```{r}
 
@@ -86,10 +86,10 @@ tapply(datos$shares_count_fb, datos$type, mean)
 tapply(datos$engagement_fb, datos$type, mean)
 
 
-#grafico que muestra el n∫ de likes en funcion del tipo de post
+#grafico que muestra el n¬∫ de likes en funcion del tipo de post
 ggplot(data = datos) + 
    geom_point(mapping = aes(x = type, y = likes_count_fb))+
-  xlab("type") + ylab("n∫ de likes")
+  xlab("type") + ylab("n¬∫ de likes")
 
 #grafico que muestra el engagement en funcion del tipo de post
 ggplot(data = datos) + 
@@ -100,26 +100,26 @@ ggplot(data = datos) +
 
 ```
 
-Podemos ver como las fotos generan muchos mas likes/engagement que cualquier otro tipo de publicacion, seguido de cerca por el Status. En el prÛximo apartado nos centraremos sÛlo en los posts que representan un cambio en el Status.
+Podemos ver como las fotos generan muchos mas likes/engagement que cualquier otro tipo de publicacion, seguido de cerca por el Status. En el pr√≥ximo apartado nos centraremos s√≥lo en los posts que representan un cambio en el Status.
 
 
 
 ******
-# An·lisis para los cambios de estado
+# An√°lisis para los cambios de estado
 ******
 
 Vamos a extraer un subconjunto de datos del fichero original, 
-que contenga solo los registros con type=status y a realizar un an·lisis sobre estos. Clasificaremos nuestros datos en 3 grupos, en funciÛn del engagement, para establecer cuales son las palabras m·s usadas por grupo y ver si existen diferencias significativas.
+que contenga solo los registros con type=status y a realizar un an√°lisis sobre estos. Clasificaremos nuestros datos en 3 grupos, en funci√≥n del engagement, para establecer cuales son las palabras m√°s usadas por grupo y ver si existen diferencias significativas.
 
 
 ```{r}
 
-#Nos quedamo sÛlo con type=status
+#Nos quedamo s√≥lo con type=status
 levels(datos$type)
 datos_status <-  fdatos[which(fdatos$type=="status"),]
 
 
-# para este subconjunto vamos a crear una nueva variable categÛrica que tome los valores(alto, medio, bajo) en funciÛn del engagement
+# para este subconjunto vamos a crear una nueva variable categ√≥rica que tome los valores(alto, medio, bajo) en funci√≥n del engagement
 
 # primero ordenamos los datos de forma creciente, segun engagement
 datos_status <- datos_status[order(datos_status$engagement_fb),] 
@@ -138,11 +138,11 @@ limite <- quantile(datos_status$engagement_fb, c(0.33,0.66))
 datos_status$eng_level <- as.factor(ifelse(datos_status$engagement_fb<  limite[1],"bajo", ifelse(datos_status$engagement_fb <  limite[2],"medio","alto")))
 
 
-#Calculamos la media de n∫ de engagement en funciÛn de la nueva variable
+#Calculamos la media de n¬∫ de engagement en funci√≥n de la nueva variable
 tapply(datos_status$engagement_fb,datos_status$eng_level,mean)
 
 
-#Vamos a extraer el post_message de nuestros datos, separ·ndolo en funciÛn del engagement level
+#Vamos a extraer el post_message de nuestros datos, separ√°ndolo en funci√≥n del engagement level
 
 linea_bajo <- datos_status$post_message[datos_status$eng_level=="bajo"]
 linea_medio <- datos_status$post_message[datos_status$eng_level=="medio"]
@@ -153,7 +153,7 @@ linea_medio = iconv(linea_medio, to="ASCII//TRANSLIT")
 linea_alto = iconv(linea_alto, to="ASCII//TRANSLIT")
 
 
-# Vamos a trabajar con un corpus, creamos primero una funciÛn que nos sirva para completar despues del stemming.
+# Vamos a trabajar con un corpus, creamos primero una funci√≥n que nos sirva para completar despues del stemming.
 #stemCompletion2 <- function(x, dictionary){
 #  x <- unlist(strsplit(as.character(x), " "))
 #  x <- x[x != ""]
@@ -162,27 +162,27 @@ linea_alto = iconv(linea_alto, to="ASCII//TRANSLIT")
 #  PlainTextDocument(stripWhitespace(x))}
 
 
-# FunciÛn que limpiar· el corpus
+# Funci√≥n que limpiar√° el corpus
 fun_corpus <- function(x) {
   #creamos corpus
   doc.corpus <- Corpus(VectorSource(x))
   # Vamos a ir eliminando/modificando el corpus para quedarnos solo con     las palabras necesarias 
-  # Transformamos a min√∫sculas
+  # Transformamos a min√É¬∫sculas
   doc.corpus <- tm_map(doc.corpus, content_transformer(tolower)) 
-  # Quitamos la puntuaci√≥n
+  # Quitamos la puntuaci√É¬≥n
   doc.corpus <- tm_map(doc.corpus, removePunctuation) 
-  # Quitamos n√∫meros
+  # Quitamos n√É¬∫meros
   doc.corpus <- tm_map(doc.corpus, removeNumbers)
   # Quitamos espacios en blanco
   doc.corpus <- tm_map(doc.corpus, stripWhitespace)
-  # Quitamos palabras sin valor analitico, en ingles y espa√±ol
+  # Quitamos palabras sin valor analitico, en ingles y espa√É¬±ol
   doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("spanish")) 
   doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("english"))  
   # Palabras especificas
-  # revisar, aÒadirlas a un fichero
+  # revisar, a√±adirlas a un fichero
   doc.corpus <- tm_map(doc.corpus, removeWords, c("vomitos", "enfermedad",   "sindrome", "marfan"))   
   # sustituimos palabras derivadas 
-  # **** Esta parte de momento la dejamos comentada ya que necesita revisiÛn
+  # **** Esta parte de momento la dejamos comentada ya que necesita revisi√≥n
   # primero creamos una copia, que usaremos como diccionario
   #doc.corpus.copy <- doc.corpus 
   #sustituimos
@@ -203,18 +203,18 @@ return(TDM)
 }
 
 
-#Aplicamos a cada uno de los postmensajes la funciÛn para convertirlo en un corpus y limpiarlo
+#Aplicamos a cada uno de los postmensajes la funci√≥n para convertirlo en un corpus y limpiarlo
 TDM_bajo <- fun_corpus(linea_bajo)
 TDM_medio <- fun_corpus(linea_medio)
 TDM_alto <- fun_corpus(linea_alto)
 
-#Reducimos el n∫ de ceros de la matriz de tÈrminos
+#Reducimos el n¬∫ de ceros de la matriz de t√©rminos
 TDM_bajo <- removeSparseTerms(TDM_bajo, 0.99)
 TDM_medio <- removeSparseTerms(TDM_medio, 0.99)
 TDM_alto <- removeSparseTerms(TDM_alto, 0.99)
 
 
-#Definimos funciÛn
+#Definimos funci√≥n
 
 fun_matriz <- function(x){
 TDM_matrix<-as.matrix(x)
@@ -228,7 +228,7 @@ df_freq_bajo <- fun_matriz(TDM_bajo)
 df_freq_medio <- fun_matriz(TDM_medio)
 df_freq_alto <- fun_matriz(TDM_alto)
 
-#AÒadimos una columna que nos indica la nueva categoria
+#A√±adimos una columna que nos indica la nueva categoria
 df_freq_bajo <- data.frame(df_freq_bajo,"bajo")
 df_freq_medio <- data.frame(df_freq_medio,"medio")
 df_freq_alto <- data.frame(df_freq_alto,"alto")
@@ -242,7 +242,7 @@ union_df_freq <- data.frame(rbind(df_freq_bajo,df_freq_medio,df_freq_alto))
                             
 filtrado <- data.frame(subset(union_df_freq, freq>35))
 
-p <- ggplot(filtrado, aes(word, freq, colour=factor(nivel)))    
+p <- ggplot(filtrado, aes(word, freq, fill=factor(nivel)))    
 p <- p + geom_bar(stat="identity")   
 p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
 p 
