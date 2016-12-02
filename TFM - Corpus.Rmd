@@ -336,7 +336,7 @@ unido_all_mat <- as.matrix(unido_all_df)
 
 #matriz_unido_tr <- t(as.matrix(matriz_unido))
 
-comparison.cloud(unido_all_mat,scale=c(0.5,1.5),max.words=45,
+comparison.cloud(unido_all_mat,scale=c(0.5,1.5),max.words=80,
 	random.order=FALSE,rot.per=0,
 	colors=brewer.pal(3,"Dark2"),
 	use.r.layout=TRUE,title.size=1)
