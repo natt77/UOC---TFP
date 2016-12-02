@@ -275,6 +275,9 @@ E2=d*(a+b)/(c+d)
 
 unido$LL <- 2 * ( a*log(a/E1) + b*log(b/E2) )
 
+unido <- as.data.frame(unido)
+unido <- unido[order(-unido[,4]),]
+
 #Mostramos las palabras con un LL más alto
 head(unido)
 
