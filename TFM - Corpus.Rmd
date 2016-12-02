@@ -112,7 +112,7 @@ inspect(TDM[1:20,1:8])
 # Reducimos la matriz
 # cuanto mayor ponemos el coeficiente mÃ¡s palabras tenemos
 # probar con varios valores
-TDM <- removeSparseTerms(TDM, 0.995)
+TDM <- removeSparseTerms(TDM, 0.999)
 #dtms
 inspect(TDM[1:5,1:5])
 
@@ -280,6 +280,66 @@ head(unido)
 
 #Mostramos las palabras con un LL más bajo
 tail(unido)
+
+```
+******
+# Comparativa entre nubes de palabras 
+******
+
+```{r}
+library(quanteda)
+
+palab_frec.df$tipo <- "Facebook"
+palab_frec_dec.df$tipo <- "Decalogo"
+
+unido_all <- join(palab_frec.df, palab_frec_dec.df, by="word" , type="full")
+
+unido_all$frec1<-ifelse(is.na(unido_all$frec1),0, unido_all$frec1)
+unido_all$frec2<-ifelse(is.na(unido_all$frec2),0, unido_all$frec2)
+
+#unido_all$frec<- unido_all$frec1 + unido_all$frec2
+
+unido_all <- unido_all[,c(1,2,4)]
+unido_all_mat <- as.matrix(unido_all)
+
+row.names(unido_all_mat) <- unido_all_mat[,1]
+
+unido_all_mat <- unido_all_mat[,c(2,3)]
+unido_all_df <- as.data.frame(unido_all_mat)
+
+unido_all_df$frec1 <- as.numeric(unido_all_df$frec1)
+unido_all_df$frec2 <- as.numeric(unido_all_df$frec2)
+
+names(unido_all_df)[1] <- "Facebook"
+names(unido_all_df)[2] <- "Decalogo"
+
+unido_all_mat <- as.matrix(unido_all_df)
+
+#palab_frec.df$word <- as.character(palab_frec.df$word)
+#palab_frec.df$tipo <- "Facebook"
+#corpus_1 <- corpus(palab_frec.df,textField="word")
+
+#palab_frec_dec.df$word <-as.character(palab_frec_dec.df$word)
+#palab_frec_dec.df$tipo <- "Decalogo"
+#corpus_2 <- corpus(palab_frec_dec.df,textField="word")
+
+#docvars(corpus_1, "id") <- "Facebook" 
+#docvars(corpus_2, "id") <- "Decalogo"
+
+#corpus_unido <- corpus_1 + corpus_2
+
+#TDM_unido <- TermDocumentMatrix(as.VCorpus(corpus_unido), 
+#       control = list(wordLengths = c(3, Inf))) 
+#matriz_unido <- dfm(corpus_unido, groups = "id")
+
+#plot(TDM_unido, comparison=TRUE)
+
+#matriz_unido_tr <- t(as.matrix(matriz_unido))
+
+comparison.cloud(unido_all_mat,scale=c(0.5,1.5),max.words=45,
+	random.order=FALSE,rot.per=0,
+	colors=brewer.pal(3,"Dark2"),
+	use.r.layout=TRUE,title.size=1)
 
 ```
 
