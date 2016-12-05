@@ -32,9 +32,9 @@ nombreruta <-getwd()
 
 #leemos todos los ficheros con datos de Facebook
 fdatos <- data.frame()
-file.names <- dir(nombreruta, pattern = "ANSII.csv")
+file.names <- dir(nombreruta, pattern = "ANSII.txt")
 for(i in 1:length(file.names)){
-  file <- read.csv(file.names[i], header = TRUE, stringsAsFactors = FALSE,encoding = "ANSII")
+  file <- read.csv(file.names[i], header = TRUE, stringsAsFactors = FALSE,encoding = "ANSII", sep="\t", fill=TRUE)
   fdatos <- rbind(fdatos, file)
 }
 
@@ -56,21 +56,6 @@ datos$shares_count_fb <- as.numeric(datos$shares_count_fb)
 datos$engagement_fb <- as.numeric(datos$engagement_fb)
 
 
-#Observamos que hay valores que se han introducido como NA para las columnas numéricas, miramos que esta ocurriendo
-
-which(is.na(datos$likes_count_fb))
-
-#hay 2 filas que contienen NA, vemos el valor completo de la fila en el fichero original
-
-fdatos[501,]
-fdatos[1955,]
-
-
-#En el primer caso es una linea de cabecera, en el segundo se han desplazado las columnas. Borramos las dos filas para poder seguir trabajando, solo en datos, no en fdatos
-
-datos <- datos[-501,]
-datos <- datos[-1954,]
-
 ```
 
 Vamos a calcular la media de cada uno de los contadores en función del tipo de contenido, y a mostrarlo visualmente
@@ -90,6 +75,21 @@ tapply(datos$engagement_fb, datos$type, mean)
 ggplot(data = datos) + 
    geom_point(mapping = aes(x = type, y = likes_count_fb))+
   xlab("type") + ylab("nº de likes")
+
+#grafico que muestra el nº de comentarios en funcion del tipo de post
+ggplot(data = datos) + 
+   geom_point(mapping = aes(x = type, y = comments_count_fb))+
+  xlab("type") + ylab("nº de comments")
+
+#grafico que muestra el nº de reacciones en funcion del tipo de post
+ggplot(data = datos) + 
+   geom_point(mapping = aes(x = type, y = reactions_count_fb))+
+  xlab("type") + ylab("nº de reacciones")
+
+#grafico que muestra el nº de shares en funcion del tipo de post
+ggplot(data = datos) + 
+   geom_point(mapping = aes(x = type, y = shares_count_fb))+
+  xlab("type") + ylab("nº de shares")
 
 #grafico que muestra el engagement en funcion del tipo de post
 ggplot(data = datos) + 
@@ -180,7 +180,7 @@ fun_corpus <- function(x) {
   doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("english"))  
   # Palabras especificas
   # revisar, añadirlas a un fichero
-  doc.corpus <- tm_map(doc.corpus, removeWords, c("vomitos", "enfermedad",   "sindrome", "marfan"))   
+  doc.corpus <- tm_map(doc.corpus, removeWords, c("vomitos","asociacion",   "enfermedad","sindrome","marfan","moebius","mas","asi","raras","wolfram"))   
   # sustituimos palabras derivadas 
   # **** Esta parte de momento la dejamos comentada ya que necesita revisión
   # primero creamos una copia, que usaremos como diccionario
@@ -240,9 +240,9 @@ colnames(df_freq_alto)[3] <- "nivel"
 union_df_freq <- data.frame(rbind(df_freq_bajo,df_freq_medio,df_freq_alto))
 
                             
-filtrado <- data.frame(subset(union_df_freq, freq>35))
+filtrado <- data.frame(subset(union_df_freq, freq>40))
 
-p <- ggplot(filtrado, aes(word, freq, fill=factor(nivel)))    
+p <- ggplot(filtrado, aes(word, freq, fill=factor(nivel)))  
 p <- p + geom_bar(stat="identity")   
 p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
 p 
