@@ -68,7 +68,7 @@ doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("spanish"))
 doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("english"))  
 # Palabras especificas
 # revisar, añadirlas a un fichero
-doc.corpus <- tm_map(doc.corpus, removeWords, c("vomitos","asociacion" "enfermedad","sindrome","marfan","moebius","mas","asi","raras","wolfram"))   
+doc.corpus <- tm_map(doc.corpus, removeWords, c("vomitos","asociacion", "enfermedad","sindrome","marfan","moebius","mas","asi","raras","wolfram"))   
 # sustituimos palabras derivadas 
 # **** Esta parte de momento la dejamos comentada ya que necesita revisión
 # primero creamos una copia, que usaremos como diccionario
