@@ -246,7 +246,17 @@ p <- ggplot(filtrado, aes(word, freq, fill=factor(nivel)))
 p <- p + geom_bar(stat="identity")   
 p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
 p 
+```
+Ahora vamos a crear 2 nubes de palabras, una para lo de nivel bajo y otra para los de nivel alto, para visualizar las diferencias entre ellos.
 
+```{r}
+
+#nube de palabras nivel alto
+wordcloud(df_freq_alto$word, df_freq_alto$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+max.words=45, rot.per=0)
+
+#nube de palabras nivel bajo
+wordcloud(df_freq_bajo$word, df_freq_bajo$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+max.words=45, rot.per=0)
 
 ```
-
