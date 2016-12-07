@@ -1,0 +1,67 @@
+﻿1.Impulsar un Plan de desarrollo e implementación de la Estrategia Nacional de ER
+1. Impulsar un plan de implementación de la Estrategia Nacional de Enfermedades Raras que incluya: a. Tareas claras identificando a responsables para cada una de ellas b. Objetivos que puedan ser medibles por indicadores claros c. Plazos de cumplimiento para cada uno de los objetivos d. Identificación y asignación de recursos humanos, técnicos y económicos para cada uno de los objetivos garantizando su sostenibilidad mediante partida presupuestaria estatal 
+2. Crear un Comité de Seguimiento y Evaluación externo que emita un informe anual del estado de situación de los objetivos acordados. 
+3. Difundir la información de los Planes Autonómicos en la web del MSSSI 
+4. Crear un comité dentro del MSSSI con dos representantes de FEDER que coordine y cohesione la implementación y el desarrollo de propuestas establecidas en la Estrategia a nivel Nacional y autonómico.
+5. Generar un cuadro de mando que permita hacer seguimiento de los indicadores. 
+6. Solicitar a las CCAA la creación de Planes específicos para las ER dotados de las estructuras y fondos necesarios de acuerdo con los criterios de la Estrategia. 
+2.Garantizar la sostenibilidad del Registro Nacional y la adecuada codificación de las ER 
+1. Asegurar que el Registro Nacional de Enfermedades Raras sea una realidad donde todas las CCAA e investigadores colaboren, garantizándose su sostenibilidad, para el impulso de la investigación en ER. 
+2. Lograr el compromiso de participación en el Registro Nacional por todas las CCAA. 
+3. Integrar los códigos Orphanet en el sistema nacional de información sanitaria. 
+4. Desarrollar en nuestro país la Historia Clínica Electrónica, permitiéndose la utilización de SNOMED-CT y la interoperabilidad en España. 
+5. Impulsar que los sistemas de codificación existentes sean interoperables a nivel europeo, con el horizonte de los códigos Orpha.
+3.  Promover la Formación e Información en Enfermedades Raras 
+1. Elaborar guías de Atención a las ER con un enfoque biopsicosocial, por parte de grupos de trabajo formados por profesionales, pacientes y avalados por la Administración y que dichas Guías se pongan a disposición de la atención primaria y especialistas. 
+2. Promover dentro del catálogo de titulaciones universitarias y no universitarias de disciplinas socio sanitarias, materias obligatorias y optativas relacionadas con los conocimientos clínicos, sociales y educativos de las enfermedades raras. 
+3. Impulsar la formación interuniversitaria e interdisciplinar de posgrado: inclusión de contenidos en los máster ya existentes de epidemiología y genética, atención primaria, psicología general sanitaria y educación. Formación específica especializada en la atención bio-psico-social en ER.
+4. Desarrollar un módulo específico de ER en el programa MIR.
+5. Facilitar a los profesionales del ámbito sanitario la información y acceso a consultas especializadas y de genética con el fin de agilizar cuestiones de especial necesidad en ER. Por medio de desplegables en sus protocolos clínicos. 
+6. Promover la Implantación de los números europeos 116 de líneas de ayuda alas ER con carácter gratuito. 
+4. Favorecer la Investigación en Enfermedades Raras 
+1. Recuperar e incrementar el nivel de financiación de la I+D+i a niveles de 2009 
+2. Fomentar la investigación clínica en los centros de referencia y CSUR. También en este marco la investigación social con participación de las organizaciones de pacientes. 
+3. Explorar diferentes medidas de desgravación fiscal para la I+D+i en ámbito nacional y autonómico 
+5.Fortalecer, garantizar y agilizar el procedimiento de designación de los Centros, Servicios y Unidades de Referencia (CSUR) 
+1. Ampliar la dotación de recursos del proyecto CSUR para agilizar el proceso de designación. 
+2. Reclamar que en los Presupuestos Generales del Estado para el año 2016 y siguientes se contemple una partida presupuestaria específica para la asistencia sanitaria prestada en los CSUR. Reactivación de la partida específica de los Fondos de Cohesión sanitaria para el sostenimiento de la atención prestada en los CSUR. 
+3. Incluir en los CSUR la figura de gestor de caso. 
+4. Crear e implementar en el sistema de evaluación de CSUR controles de calidad externos y sus correspondientes planes de mejora en colaboración con las asociaciones de pacientes. La satisfacción del paciente y sus familias debe ser un parámetro fundamental en la evaluación. 
+5. Mejorar los mecanismos de la financiación de los gastos originados por los traslados de los afectados (gastos conexos como viaje, alojamiento, manutención y acompañante si proceden) y anticipar, en parte, el importe de los gastos para sufragar los traslados.
+ 6. Creación de una partida presupuestaria de carácter estatal que garantice la financiación, -en parte o en todo- y siempre el reembolso de los gastos originados por el traslado del paciente y acompañante si procede (gastos conexos como viaje, alojamiento, manutención…) 
+7. Fomentar la participación de los Centros de referencia en las Redes Europeas de Referencia. 
+8. Establecer las rutas de derivación entre AP, AH y CSUR para garantizar el acceso en equidad e independientemente donde vivan los pacientes. 
+ 6.Implementar un modelo de Asistencia Integral que dé respuesta a las personas con enfermedades poco frecuentes 
+1. Incluir, en atención primaria, dentro de los programas de atención al niño sano (autonómicos) signos y síntomas de alerta de sospecha de ER. 
+2. Impulsar la formación académica, formación continuada, formación a pacientes y familias, guías clínicas, así como implantación del protocolo DICE APER en toda la atención primaria a nivel nacional. 
+3. Garantizar el derecho a la segunda opinión médica en todas las CCAA y que dicho derecho no se restrinja al ámbito de la comunidad autónoma de residencia.
+ 4. Implementar mejoras en los informes médicos, para que contengan además del diagnóstico, información sobre la sintomatología principal de la enfermedad que se diagnostica y las repercusiones que la misma pueda tener en el desempeño de las actividades básicas de la vida diaria. 
+5. Incorporar en la cartera básica de servicios comunes del SNS:
+ a. La atención psicológica continuada (no limitada a supuestos posttraumáticos), y la atención de fisioterapia y rehabilitación continuadas (no limitada a supuestos en que se pueda recuperar la movilidad funcional de un miembro) 
+b. La financiación de pruebas genéticas de diagnóstico para aquéllas ER de cuyo diagnóstico se derive un tratamiento efectivo. 
+7. Impulsar el acceso equitativo a Medicamentos Huérfanos y Productos Sanitarios 
+1. Reclamar que en los Presupuestos Generales del Estado para el año 2016 y siguientes se contemple una partida presupuestaria específica para garantizar un acceso en equidad a los MH. Reactivación de la partida específica de los Fondos de Cohesión sanitaria para el acceso a MH. 
+2. Promover la subvención y financiación de productos sanitarios no reconocidos como medicamentos (por ejemplo, cosméticos para enfermedades dermatológicas, y también productos dietéticos, material de cura, etc) 
+8. Fortalecer los Servicios Sociales: atención a discapacidad y dependencia 
+1. Promover la creación de una Ley de Servicios Sociales que establezca los criterios de coordinación entre los servicios de sanidad, los servicios sociales, los servicios de empleo y los educativos, que garantice la equidad de las personas que viven en diferentes comunidades y articule los derechos de cada persona a recibir apoyos y servicios para su autonomía personal y su participación en la comunidad. Cuanto menor es la prevalencia de las enfermedades mayor es la necesidad de reforzar la coordinación de recursos.
+ 2. Aprobar urgentemente los baremos de calificación de la discapacidad siguiendo los criterios de la CIF 
+3. Unificar los procesos de valoración de la discapacidad y la situación de dependencia para evitar informes contradictorios, ahorrar repeticiones de trámites y valorar de forma más eficiente la situación de la persona, entendiendo que la dependencia se manifiesta habitualmente cuando existe un grado importante de discapacidad.
+ 4. Permitir urgentemente que los profesionales de valoración de la discapacidad puedan acceder a la historia clínica y se implanten los códigos CIE-10 
+9.Promover la inclusión laboral en enfermedades poco frecuentes 
+1. Eliminar del Real Decreto 1851/2009, que recoge los requisitos para solicitar la Jubilación anticipada para trabajadores con discapacidad: el requisito de tener un 45% de discapacidad y la lista de enfermedades tasadas del artículo 2. 
+2. Fomentar que el Estatuto de los Trabajadores recoja 
+a. La exigencia para que las empresas con una plantilla superior a 50 trabajadores implementen el procedimiento legal para poder hacer efectivo el derecho a la adaptación y/o cambios del puesto de trabajo.
+ b. Un permiso anual retribuido para participar en actividades que inciden directamente en la mejora de la calidad de vida de la persona afectada por una enfermedad grave. 
+c. El reconocimiento de una disminución progresiva del salario cuando se reduzca la jornada laboral para atender a un familiar enfermo d. Modificar Estatuto Trabajadores art.37.3 b) para extender la duración del permiso retribuido mientras permanezca la situación de convalecencia, desplazamiento u hospitalización de familiar afectado
+3. Implementar en la Orden del 2 Noviembre del 2000 para valoración del grado discapacidad, la obligatoriedad de informar al solicitante del reconocimiento de la discapacidad, de la posibilidad que tiene de que se le efectúe un informe que recoja las capacidades o aptitudes que tenga la persona a efectos de su inclusión laboral. 
+4. Modificar el Real Decreto 1148/2011 de 29 julio (prestación por hijo a cargo con enfermedad grave) de forma que recoja expresamente:
+ a. Que la situación protegida del artículo 2 contemple que el menor afectado por enfermedad grave pueda estar escolarizado (no sólo en hospital o cuidados en domicilio) si en el centro educativo está recibiendo los cuidados requeridos. 
+b. Que estos cuidados no sean exclusivamente de carácter médico-sanitario. 
+c. Que se elimine del art.7 la causa de extinción automática del derecho por el mero cumplimiento de 18 años de edad. Como alternativa, ha de preverse la prórroga siempre que se acredite la permanencia de la causa que motivó el reconocimiento de la prestación. 
+5. Impulsar un reconocimiento y bonificación fiscal para empleadores que contraten a cuidadores de afectados por E.R. que desempeñen su trabajo desde el propio domicilio (Teletrabajo). 
+6. Fomentar que los empleadores de personas con E.R. que afronten sus bajas puedan computarlas como sucede en las bajas por maternidad 
+7. Establecer protocolos de actuación coordinados sanitarios, sociales y laborales para garantizar el ejercicio del derechos al cambio y/o adaptación de puesto de trabajo 
+10.Favorecer la inclusión educativa 
+1. Establecer protocolos de coordinación entre los servicios sociales, sanitarios y educativos para garantizar el derecho a la educación inclusiva 
+2. Comprometer a las administraciones educativas, a nivel estatal y autonómico, para establecer directrices para la elaboración de protocolos de actuación con alumnos con enfermedades poco frecuentes. La elaboración de dicho protocolo debe contar con el asesoramiento especializado de las asociaciones correspondientes a la patología determinada, y otros grupos de expertos. 
+3. Regular y poner en marcha de un foro permanente de profesionales del ámbito educativo que recopilen y compartan experiencias y buenas prácticas para la inclusión educativa de alumnos con enfermedades poco frecuentes. Coordinado por FEDER y con representación de la administración educativa.
