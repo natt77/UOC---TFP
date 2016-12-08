@@ -146,7 +146,7 @@ p
 
 
 #nube de palabras
-wordcloud(palab_frec.df$word, palab_frec.df$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+wordcloud(palab_frec.df$word, palab_frec.df$freq, scale=c(3,0.5), random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
 max.words=45, rot.per=0)
 ```
 
@@ -235,7 +235,7 @@ p1
 
 #nube de palabras
 
-wordcloud(palab_frec_dec.df$word, palab_frec_dec.df$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+wordcloud(palab_frec_dec.df$word, palab_frec_dec.df$freq, scale=c(3,0.5), random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
 max.words=45, rot.per=0)
 
 
@@ -339,7 +339,7 @@ unido_all_mat <- as.matrix(unido_all_df)
 
 #matriz_unido_tr <- t(as.matrix(matriz_unido))
 
-comparison.cloud(unido_all_mat,scale=c(0.5,1.5),max.words=80,
+comparison.cloud(unido_all_mat,scale=c(1.5,0.5),max.words=80,
 	random.order=FALSE,rot.per=0,
 	colors=brewer.pal(3,"Dark2"),
 	use.r.layout=TRUE,title.size=1)
