@@ -291,7 +291,6 @@ tail(unido)
 ******
 
 ```{r}
-library(quanteda)
 
 palab_frec.df$tipo <- "Facebook"
 palab_frec_dec.df$tipo <- "Decalogo"
