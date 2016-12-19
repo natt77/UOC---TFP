@@ -1,0 +1,405 @@
+---
+title: "TFM - Estadisticas"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+******
+# Análisis por tipo de contenido
+******
+
+Leemos fichero de datos y seleccionamos columnas necesarias
+
+```{r}
+
+# Para la función Corpus()
+library(tm)
+# Para la función rbind.fill
+library(plyr)
+library(SnowballC)
+# Para los graficos
+library(ggplot2)  
+# Para la nube de palabras
+library(wordcloud)
+
+#directorio de trabajo
+nombreruta <-getwd()
+
+#leemos todos los ficheros con datos de Facebook
+fdatos <- data.frame()
+file.names <- dir(nombreruta, pattern = "ANSII.txt")
+for(i in 1:length(file.names)){
+  file <- read.csv(file.names[i], header = TRUE, stringsAsFactors = FALSE,encoding = "ANSII", sep="\t", fill=TRUE)
+  fdatos <- rbind(fdatos, file)
+}
+
+fsentim <-  read.csv("/resources/Sentiment_output.csv", header = TRUE, stringsAsFactors = FALSE,encoding = "ANSII", sep=";")
+#seleccionamos solo las columnas que queremos para las estadisticas
+columnas <- c("type", "likes_count_fb", "comments_count_fb", "reactions_count_fb","shares_count_fb","engagement_fb")
+datos <- data.frame(fdatos[,columnas])
+
+datos_sent <- cbind (datos, fsentim)
+head(datos_sent,5)
+summary(datos_sent)
+
+
+#transformamos el type a factor
+
+datos_sent$type <- as.factor(datos$type)
+
+```
+
+Vamos a calcular el mínimo, máximo, media y desviación típica de cada uno de los contadores
+
+```{r}
+summary(datos_sent$likes_count_fb)
+sd(datos_sent$likes_count_fb)
+
+summary(datos_sent$comments_count_fb)
+sd(datos_sent$comments_count_fb)
+
+summary(datos_sent$reactions_count_fb)
+sd(datos_sent$reactions_count_fb)
+
+summary(datos_sent$shares_count_fb)
+sd(datos_sent$shares_count_fb)
+
+summary(datos_sent$engagement_fb)
+sd(datos_sent$engagement_fb)
+
+summary(datos_sent$polarity)
+sd(datos_sent$polarity)
+
+#En el caso de 'type' al ser una variable categórica lo que calculamos es la frecuencia de cada uno de los factores.
+freq_type <- as.data.frame(base::table(datos_sent$type))
+freq_type
+
+```
+
+Calculamos ahora las correlaciones entre la polaridad y 
+
+```{r}
+cor.test(datos_sent$polarity, datos_sent$likes_count_fb)
+
+modelo_like <- lm(datos_sent$polarity~datos_sent$likes_count_fb)
+
+summary(modelo_like)
+
+
+```
+
+Tenemos un P-valor muy alto 0.3176, lo que nos lleva a aceptar la hipótesis nula que nos indica que las variables no están correlacionadas.
+
+Voy a repetirlo, pero quitando los casos con polaridad=0, ya que hay demasiados casos en esa situación que pueden estar influenciando el análisis.
+
+```{r}
+datos_sent_fil<- datos_sent[datos_sent$polarity!=0,]
+
+
+modelo_like_fil <- lm(datos_sent_fil$polarity~datos_sent_fil$likes_count_fb)
+
+summary(modelo_like_fil)
+```
+
+En este caso tenemos un p-valor=0.01786 < 0.05, lo que nos llevaría a rechazar la hipótesis nula.
+
+
+```{r}
+
+#Calculamos las medias en funcion del type
+
+tapply(datos$likes_count_fb, datos$type, mean)
+tapply(datos$comments_count_fb, datos$type, mean)
+tapply(datos$reactions_count_fb, datos$type, mean)
+tapply(datos$shares_count_fb, datos$type, mean)
+tapply(datos$engagement_fb, datos$type, mean)
+
+
+#grafico que muestra la polaridad en función del nº de likes
+ggplot(data = datos_sent) + 
+   geom_point(mapping = aes(x = polarity, y =   likes_count_fb))+
+  xlab("polarity") + ylab("nº de likes") + geom_abline(colour="red")
+
+#grafico que muestra el nº de comentarios en funcion del tipo de post
+ggplot(data = datos_sent) + 
+   geom_point(mapping = aes(x = polarity, y =   comments_count_fb))+
+  xlab("polarity") + ylab("nº de comentarios") + geom_abline(colour="red")
+
+#grafico que muestra el nº de reacciones en funcion del tipo de post
+ggplot(data = datos_sent) + 
+   geom_point(mapping = aes(x = polarity, y =   reactions_count_fb))+
+  xlab("polarity") + ylab("nº de reacciones") + geom_abline(colour="red")
+
+#grafico que muestra el nº de shares en funcion del tipo de post
+ggplot(data = datos_sent) + 
+   geom_point(mapping = aes(x = polarity, y =   shares_count_fb))+
+  xlab("polarity") + ylab("nº de shares") + geom_abline(colour="red")
+#grafico que muestra el engagement en funcion del tipo de post
+ggplot(data = datos_sent) + 
+   geom_point(mapping = aes(x = polarity, y =   engagement_fb))+
+  xlab("polarity") + ylab("nº de engagement") + geom_abline(colour="red")
+
+
+
+```
+Hacemos lo mismo pero para la subjetividad
+
+```{r}
+
+#grafico que muestra la subjetividad en función del nº de likes
+ggplot(data = datos_sent) + 
+   geom_point(mapping = aes(x = subjectivity, y =   likes_count_fb))+
+  xlab("subjectivity") + ylab("nº de likes") + geom_abline(colour="red")
+
+```
+
+Ahora lo hacemos para comparar la variable categórica 'type' con el resto de variables continuas
+
+```{r}
+ggplot(data = datos_sent) + 
+   geom_boxplot(mapping = aes(x = type, y =   likes_count_fb))+
+  xlab("type") + ylab("nº de likes") 
+
+
+
+ggplot(data = datos_sent) + 
+   geom_boxplot(mapping = aes(x = type, y =   engagement_fb))+
+  xlab("type") + ylab("engagement") 
+```
+
+
+
+
+Podemos ver como las fotos generan muchos mas likes/engagement que cualquier otro tipo de publicacion, seguido de cerca por el Status. En el próximo apartado nos centraremos sólo en los posts que representan un cambio en el Status.
+
+
+
+******
+# Análisis para los cambios de estado
+******
+
+Vamos a extraer un subconjunto de datos del fichero original, 
+que contenga solo los registros con type=status y a realizar un análisis sobre estos. Clasificaremos nuestros datos en 3 grupos, en función del engagement, para establecer cuales son las palabras más usadas por grupo y ver si existen diferencias significativas.
+
+
+```{r}
+
+#Nos quedamo sólo con type=status
+levels(datos_sent$type)
+datos_status <-  datos_sent[which(datos_sent$type=="status"),]
+
+
+# para este subconjunto vamos a crear una nueva variable categórica que tome los valores(alto, medio, bajo) en función del engagement
+
+# primero ordenamos los datos de forma creciente, segun engagement
+datos_status <- datos_status[order(datos_status$engagement_fb),] 
+
+head(datos_status$engagement_fb)
+tail(datos_status$engagement_fb)
+
+
+#Calculalos los limites que dividiran la muestra en 3
+limite <- quantile(datos_status$engagement_fb, c(0.33,0.66))
+
+#Creamos una nueva variable (eng_level), definida como un factor, y caracterizada por tener el valor 'bajo' para el 33% mas bajo de engagement, 'medio' para valores entre el 33% y el 66%  y 'alto' para el resto.
+
+datos_status$eng_level <- as.factor(ifelse(datos_status$engagement_fb<  limite[1],"bajo", ifelse(datos_status$engagement_fb <  limite[2],"medio","alto")))
+
+
+#Calculamos la media de nº de engagement en función de la nueva variable
+tapply(datos_status$engagement_fb,datos_status$eng_level,mean)
+
+
+#Vamos a extraer el post_message de nuestros datos, separándolo en función del engagement level
+
+linea_bajo <- datos_status$post_message[datos_status$eng_level=="bajo"]
+linea_medio <- datos_status$post_message[datos_status$eng_level=="medio"]
+linea_alto <- datos_status$post_message[datos_status$eng_level=="alto"]
+
+linea_bajo = iconv(linea_bajo, to="ASCII//TRANSLIT")
+linea_medio = iconv(linea_medio, to="ASCII//TRANSLIT")
+linea_alto = iconv(linea_alto, to="ASCII//TRANSLIT")
+
+
+# Vamos a trabajar con un corpus, creamos primero una función que nos sirva para completar despues del stemming.
+#stemCompletion2 <- function(x, dictionary){
+#  x <- unlist(strsplit(as.character(x), " "))
+#  x <- x[x != ""]
+#  x <- stemCompletion(x, dictionary=dictionary)
+#  x <- paste(x, sep="", collapse=" ")
+#  PlainTextDocument(stripWhitespace(x))}
+
+
+# Función que limpiará el corpus
+fun_corpus <- function(x) {
+  #creamos corpus
+  doc.corpus <- Corpus(VectorSource(x))
+  # Vamos a ir eliminando/modificando el corpus para quedarnos solo con     las palabras necesarias 
+  # Transformamos a minÃºsculas
+  doc.corpus <- tm_map(doc.corpus, content_transformer(tolower)) 
+  # Quitamos la puntuaciÃ³n
+  doc.corpus <- tm_map(doc.corpus, removePunctuation) 
+  # Quitamos nÃºmeros
+  doc.corpus <- tm_map(doc.corpus, removeNumbers)
+  # Quitamos espacios en blanco
+  doc.corpus <- tm_map(doc.corpus, stripWhitespace)
+  # Quitamos palabras sin valor analitico, en ingles y espaÃ±ol
+  doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("spanish")) 
+  doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("english"))  
+  # Palabras especificas
+  # revisar, añadirlas a un fichero
+  doc.corpus <- tm_map(doc.corpus, removeWords, c("vomitos","asociacion",   "enfermedad","sindrome","marfan","moebius","mas","asi","raras","wolfram"))   
+  # sustituimos palabras derivadas 
+  # **** Esta parte de momento la dejamos comentada ya que necesita revisión
+  # primero creamos una copia, que usaremos como diccionario
+  #doc.corpus.copy <- doc.corpus 
+  #sustituimos
+  #doc.corpus <- tm_map(doc.corpus, stemDocument, language="spanish")
+  
+  #doc.corpus.new <- lapply(doc.corpus, stemCompletion2,    dictionary=doc.corpus.copy)
+  
+  #doc.corpus <- as.VCorpus(doc.corpus.new)
+  
+  # Indicamos que nuestro corpus es un texto
+  doc.corpus <- tm_map(doc.corpus, PlainTextDocument) 
+  
+  # Creamos una matriz de terminos - documentos
+  TDM <- TermDocumentMatrix(doc.corpus)
+  
+  
+return(TDM)  
+}
+
+
+#Aplicamos a cada uno de los postmensajes la función para convertirlo en un corpus y limpiarlo
+TDM_bajo <- fun_corpus(linea_bajo)
+TDM_medio <- fun_corpus(linea_medio)
+TDM_alto <- fun_corpus(linea_alto)
+
+#Reducimos el nº de ceros de la matriz de términos
+TDM_bajo <- removeSparseTerms(TDM_bajo, 0.995)
+TDM_medio <- removeSparseTerms(TDM_medio, 0.995)
+TDM_alto <- removeSparseTerms(TDM_alto, 0.995)
+
+
+#Definimos función
+
+fun_matriz <- function(x){
+TDM_matrix<-as.matrix(x)
+frecuencia <- sort(rowSums(TDM_matrix), decreasing=TRUE)
+palab_frec.df <- data.frame(word=names(frecuencia), freq=frecuencia)
+
+return(palab_frec.df)
+}
+
+df_freq_bajo <- fun_matriz(TDM_bajo)
+df_freq_medio <- fun_matriz(TDM_medio)
+df_freq_alto <- fun_matriz(TDM_alto)
+
+#Añadimos una columna que nos indica la nueva categoria
+df_freq_bajo <- data.frame(df_freq_bajo,"bajo")
+df_freq_medio <- data.frame(df_freq_medio,"medio")
+df_freq_alto <- data.frame(df_freq_alto,"alto")
+
+colnames(df_freq_bajo)[3] <- "nivel"
+colnames(df_freq_medio)[3] <- "nivel"
+colnames(df_freq_alto)[3] <- "nivel"
+
+union_df_freq <- data.frame(rbind(df_freq_bajo,df_freq_medio,df_freq_alto))
+
+                            
+filtrado <- data.frame(subset(union_df_freq, freq>5))
+
+p <- ggplot(filtrado, aes(word, freq, fill=factor(nivel)))  
+p <- p + geom_bar(stat="identity")   
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
+p 
+
+
+```
+
+Vamos a crear 2 nubes de palabras, una para lo de nivel bajo y otra para los de nivel alto, para visualizar las diferencias entre ellos.
+```{r}
+
+#nube de palabras
+
+wordcloud(df_freq_alto$word, df_freq_alto$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+max.words=45, rot.per=0)
+
+
+wordcloud(df_freq_bajo$word, df_freq_bajo$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+max.words=45, rot.per=0)
+
+```
+
+Continuamos con en análisis estadístico, ahora incorporando esta nueva variable que hemos definido y que contiene información sobre el engagement(alto,medio, bajo). Vamos a compararla con la polaridad.
+
+
+```{r}
+modelo_eng <- lm(polarity ~ eng_level, data=datos_status)
+summary(modelo_eng)
+```
+
+
+```{r}
+ggplot(data = datos_status) + 
+   geom_boxplot(mapping = aes(x = eng_level, y =   polarity))+
+  xlab("nivel engagement") + ylab("polaridad") 
+
+
+```
+
+El p-valor es muy alto , no podemos asegurar que estén correlacionadas.
+
+Dado que el nº de posts con polaridad=0 es muy alto vamos a ver si eliminandolos obtenemos otro resultado. Quizá en análisis de sentimientos no ha sido correcto y por eso hay tantos valores con polaridad=0.
+
+```{r}
+
+datos_status_fil <- datos_status[datos_status$polarity!=0,]
+
+modelo_eng_fil <- lm(polarity ~ eng_level, data=datos_status_fil)
+summary(modelo_eng_fil)
+
+```
+
+```{r}
+ggplot(data = datos_status_fil) + 
+   geom_boxplot(mapping = aes(x = eng_level, y =   polarity))+
+  xlab("nivel engagement") + ylab("polaridad") +
+  geom_hline(yintercept = 0.25, colour="red")
+
+
+```
+
+
+Aunque visualmente podría parecer que de esta forma si se cumple lo que sospechábamos (el nivel de engagement está relacionado con la polaridad) el p-valor obtenido es de 0.63, lo que nos lleva a rechazar la hipótesis nula.
+
+
+Repetimos en el caso de la subjetividad:
+
+
+```{r}
+datos_status_fil1 <- datos_status[datos_status$subjectivity!=0,]
+
+modelo_eng_fil1 <- lm(subjectivity ~ eng_level, data=datos_status_fil1)
+summary(modelo_eng_fil1)
+
+``` 
+
+
+```{r}
+
+
+ggplot(data = datos_status_fil1) + 
+   geom_boxplot(mapping = aes(x = eng_level, y =   subjectivity))+
+  xlab("nivel engagement") + ylab("subjetividad") +
+  geom_hline(yintercept = 0.62, colour="red")
+```
+
+
+En el caso de la subjetividad ocurre lo mismo, el p-valor no es lo suficientemente bajo como para rechzar la hipótesis nula, por lo que podemos concluir que no están correlacionadas.
