@@ -84,50 +84,9 @@ freq_type <- as.data.frame(base::table(datos_sent$type))
 freq_type
 
 ```
-******
-# Análisis de polaridad y subjetividad
-******
 
 
-Filtramos para quedarnos solo con los registros en los que el post_message no sea vacío. Para dichos registros la polaridad y la subjetividad será cero y no queremos que influencie el análisis.
-
-```{r}
-datos_sent_fil <- datos_sent [datos_sent$post_message !="",]
-```
-
-
-
-Calculamos ahora las correlaciones entre la polaridad y las distintas variables
-
-```{r}
-
-pol_likes <- cor.test(datos_sent_fil$polarity, datos_sent_fil$likes_count_fb)
-
-pol_commen <- cor.test(datos_sent_fil$polarity, datos_sent_fil$comments_count_fb)
-
-pol_count <- cor.test(datos_sent_fil$polarity, datos_sent_fil$likes_count_fb)
-
-pol_react <- cor.test(datos_sent_fil$polarity, datos_sent_fil$reactions_count_fb)
-
-pol_engag <- cor.test(datos_sent_fil$polarity, datos_sent_fil$engagement_fb)
-
-correlaciones <- c(pol_likes$estimate,pol_commen$estimate,pol_count$estimate,pol_react$estimate,pol_engag$estimate)
-
-names(correlaciones) <- c("likes", "commen", "count","react","engage")
-
-```
-
-
-```{r}
-modelo_share <- lm(datos_sent_fil$polarity~datos_sent_fil$likes_count_fb)
-
-summary(modelo_like)
-
-```
-
-Tenemos un p-valor muy bajo, lo que nos lleva a rechazar la hipótesis nula que nos indica que las variables no son estadísiticamente significativas.
-
-
+Vamos a calcular las medias en función de la variable type
 ```{r}
 
 #Calculamos las medias en funcion del type
@@ -138,45 +97,7 @@ tapply(datos$reactions_count_fb, datos$type, mean)
 tapply(datos$shares_count_fb, datos$type, mean)
 tapply(datos$engagement_fb, datos$type, mean)
 
-
-#grafico que muestra la polaridad en función del nº de likes
-ggplot(data = datos_sent_fil) + 
-   geom_point(mapping = aes(x = polarity, y =   likes_count_fb))+
-  xlab("polarity") + ylab("nº de likes") + geom_abline(colour="red")
-
-#grafico que muestra el nº de comentarios en funcion del tipo de post
-ggplot(data = datos_sent_fil) + 
-   geom_point(mapping = aes(x = polarity, y =   comments_count_fb))+
-  xlab("polarity") + ylab("nº de comentarios") + geom_abline(colour="red")
-
-#grafico que muestra el nº de reacciones en funcion del tipo de post
-ggplot(data = datos_sent_fil) + 
-   geom_point(mapping = aes(x = polarity, y =   reactions_count_fb))+
-  xlab("polarity") + ylab("nº de reacciones") + geom_abline(colour="red")
-
-#grafico que muestra el nº de shares en funcion del tipo de post
-ggplot(data = datos_sent_fil) + 
-   geom_point(mapping = aes(x = polarity, y =   shares_count_fb))+
-  xlab("polarity") + ylab("nº de shares") + geom_abline(colour="red")
-#grafico que muestra el engagement en funcion del tipo de post
-ggplot(data = datos_sent_fil) + 
-   geom_point(mapping = aes(x = polarity, y =   engagement_fb))+
-  xlab("polarity") + ylab("nº de engagement") + geom_abline(colour="red")
-
-
-
 ```
-Hacemos lo mismo pero para la subjetividad
-
-```{r}
-
-#grafico que muestra la subjetividad en función del nº de likes
-ggplot(data = datos_sent_fil) + 
-   geom_point(mapping = aes(x = subjectivity, y =   likes_count_fb))+
-  xlab("subjectivity") + ylab("nº de likes") + geom_abline(colour="red")
-
-```
-
 ******
 # Análisis por tipo de contenido
 ******
@@ -188,15 +109,25 @@ ggplot(data = datos_sent) +
    geom_boxplot(mapping = aes(x = type, y =   likes_count_fb))+
   xlab("type") + ylab("nº de likes") 
 
+ggplot(data = datos_sent) + 
+   geom_boxplot(mapping = aes(x = type, y =   comments_count_fb))+
+  xlab("type") + ylab("nº de comment") 
 
+ggplot(data = datos_sent) + 
+   geom_boxplot(mapping = aes(x = type, y =   reactions_count_fb))+
+  xlab("type") + ylab("nº de reacciones") 
+
+ggplot(data = datos_sent) + 
+   geom_boxplot(mapping = aes(x = type, y =   shares_count_fb))+
+  xlab("type") + ylab("nº de shares") 
 
 ggplot(data = datos_sent) + 
    geom_boxplot(mapping = aes(x = type, y =   engagement_fb))+
   xlab("type") + ylab("engagement") 
 ```
 
-Podemos ver como las fotos generan muchos mas likes/engagement que cualquier otro tipo de publicacion. Los eventos, status y videos también generan bastantes likes/engagemente, seguidos por los links y notas. En el próximo apartado nos centraremos sólo en los posts que representan un cambio en el Status.
 
+Podemos ver como las fotos generan muchos mas actividad que cualquier otro tipo de publicacion. Los eventos, status y videos también generan bastantes likes/engagement, seguidos por los links y notas. En el próximo apartado nos centraremos sólo en los posts que representan un cambio en el Status.
 
 
 ******
@@ -356,6 +287,116 @@ max.words=45, rot.per=0)
 
 ```
 
+
+******
+# Análisis de polaridad y subjetividad
+******
+
+
+Filtramos para quedarnos solo con los registros en los que el post_message no sea vacío. Para dichos registros la polaridad y la subjetividad será cero y no queremos que influencie el análisis.
+
+```{r}
+datos_sent_fil <- datos_sent [datos_sent$post_message !="",]
+```
+
+
+
+Calculamos ahora las correlaciones entre la polaridad y las distintas variables
+
+```{r}
+
+pol_likes <- cor.test(datos_sent_fil$polarity, datos_sent_fil$likes_count_fb)
+
+pol_commen <- cor.test(datos_sent_fil$polarity, datos_sent_fil$comments_count_fb)
+
+pol_react <- cor.test(datos_sent_fil$polarity, datos_sent_fil$reactions_count_fb)
+
+pol_share <- cor.test(datos_sent_fil$polarity, datos_sent_fil$shares_count_fb)
+
+pol_engag <- cor.test(datos_sent_fil$polarity, datos_sent_fil$engagement_fb)
+
+correlaciones <- c(pol_likes$estimate,pol_commen$estimate,pol_react$estimate,pol_share$estimate,pol_engag$estimate)
+
+names(correlaciones) <- c("likes", "commen", "react","share","engage")
+
+```
+
+
+```{r}
+modelo_like <- lm(datos_sent_fil$polarity~datos_sent_fil$likes_count_fb)
+
+summary(modelo_like)
+
+
+modelo_comment <- lm(datos_sent_fil$polarity~datos_sent_fil$comments_count_fb)
+
+summary(modelo_comment)
+
+
+
+modelo_react <- lm(datos_sent_fil$polarity~datos_sent_fil$reactions_count_fb)
+
+summary(modelo_react)
+
+
+modelo_shares <- lm(datos_sent_fil$polarity~datos_sent_fil$shares_count_fb)
+
+summary(modelo_shares)
+
+modelo_engage <- lm(datos_sent_fil$polarity~datos_sent_fil$engagement_fb)
+
+summary(modelo_engage)
+
+
+```
+
+Para los modelos con likes, reacciones y shares tenemos un p-valor muy bajo, lo que nos lleva a rechazar la hipótesis nula que nos indica que las variables no son estadísiticamente significativas.
+
+
+```{r}
+
+
+#grafico que muestra la polaridad en función del nº de likes
+ggplot(data = datos_sent_fil) + 
+   geom_point(mapping = aes(x = polarity, y =   likes_count_fb))+
+  xlab("polarity") + ylab("nº de likes") + geom_abline(colour="red")
+
+#grafico que muestra el nº de comentarios en funcion del tipo de post
+ggplot(data = datos_sent_fil) + 
+   geom_point(mapping = aes(x = polarity, y =   comments_count_fb))+
+  xlab("polarity") + ylab("nº de comentarios") + geom_abline(colour="red")
+
+#grafico que muestra el nº de reacciones en funcion del tipo de post
+ggplot(data = datos_sent_fil) + 
+   geom_point(mapping = aes(x = polarity, y =   reactions_count_fb))+
+  xlab("polarity") + ylab("nº de reacciones") + geom_abline(colour="red")
+
+#grafico que muestra el nº de shares en funcion del tipo de post
+ggplot(data = datos_sent_fil) + 
+   geom_point(mapping = aes(x = polarity, y =   shares_count_fb))+
+  xlab("polarity") + ylab("nº de shares") + geom_abline(colour="red")
+#grafico que muestra el engagement en funcion del tipo de post
+ggplot(data = datos_sent_fil) + 
+   geom_point(mapping = aes(x = polarity, y =   engagement_fb))+
+  xlab("polarity") + ylab("nº de engagement") + geom_abline(colour="red")
+
+
+
+```
+Hacemos lo mismo pero para la subjetividad
+
+```{r}
+
+#grafico que muestra la subjetividad en función del nº de likes
+ggplot(data = datos_sent_fil) + 
+   geom_point(mapping = aes(x = subjectivity, y =   likes_count_fb))+
+  xlab("subjectivity") + ylab("nº de likes") + geom_abline(colour="red")
+
+```
+
+
+
+
 Continuamos con en análisis estadístico, ahora incorporando esta nueva variable que hemos definido y que contiene información sobre el engagement(alto,medio, bajo). Vamos a compararla con la polaridad.
 
 
@@ -371,9 +412,10 @@ ggplot(data = datos_status) +
   xlab("nivel engagement") + ylab("polaridad") +
    geom_hline(yintercept = 0, colour="red")
 
+
 ```
 
-El p-valor es menos a 0.05, lo que nos indica que las variables son estadísticamente significativas.
+El p-valor es menor de 0.05, lo que nos indica que las variables son estadísticamente significativas.
 
 Repetimos en el caso de la subjetividad:
 
@@ -383,14 +425,18 @@ datos_status_fil1 <- datos_status[datos_status$subjectivity!=0,]
 
 modelo_eng_fil1 <- lm(subjectivity ~ eng_level, data=datos_status_fil1)
 summary(modelo_eng_fil1)
+
 ``` 
 
 
 ```{r}
+
+
 ggplot(data = datos_status_fil1) + 
    geom_boxplot(mapping = aes(x = eng_level, y =   subjectivity))+
   xlab("nivel engagement") + ylab("subjetividad") +
   geom_hline(yintercept = 0.50, colour="red")
 ```
+
 
 En el caso de la subjetividad el p-valor es de 0.09, por lo que no podemos concluir que sean estadísticamente significativas.
