@@ -98,6 +98,22 @@ tapply(datos$shares_count_fb, datos$type, mean)
 tapply(datos$engagement_fb, datos$type, mean)
 
 ```
+
+calculamos también las desviaciones típicas
+
+```{r}
+
+#Calculamos las medias en funcion del type
+
+tapply(datos$likes_count_fb, datos$type, sd)
+tapply(datos$comments_count_fb, datos$type, sd)
+tapply(datos$reactions_count_fb, datos$type, sd)
+tapply(datos$shares_count_fb, datos$type, sd)
+tapply(datos$engagement_fb, datos$type, sd)
+
+```
+
+
 ******
 # Análisis por tipo de contenido
 ******
@@ -176,15 +192,6 @@ linea_medio = iconv(linea_medio, to="ASCII//TRANSLIT")
 linea_alto = iconv(linea_alto, to="ASCII//TRANSLIT")
 
 
-# Vamos a trabajar con un corpus, creamos primero una función que nos sirva para completar despues del stemming.
-#stemCompletion2 <- function(x, dictionary){
-#  x <- unlist(strsplit(as.character(x), " "))
-#  x <- x[x != ""]
-#  x <- stemCompletion(x, dictionary=dictionary)
-#  x <- paste(x, sep="", collapse=" ")
-#  PlainTextDocument(stripWhitespace(x))}
-
-
 # Función que limpiará el corpus
 fun_corpus <- function(x) {
   #creamos corpus
@@ -204,16 +211,6 @@ fun_corpus <- function(x) {
   # Palabras especificas
   # revisar, añadirlas a un fichero
   doc.corpus <- tm_map(doc.corpus, removeWords, c("vomitos","asociacion",   "enfermedad","sindrome","marfan","moebius","mas","asi","raras","wolfram"))   
-  # sustituimos palabras derivadas 
-  # **** Esta parte de momento la dejamos comentada ya que necesita revisión
-  # primero creamos una copia, que usaremos como diccionario
-  #doc.corpus.copy <- doc.corpus 
-  #sustituimos
-  #doc.corpus <- tm_map(doc.corpus, stemDocument, language="spanish")
-  
-  #doc.corpus.new <- lapply(doc.corpus, stemCompletion2,    dictionary=doc.corpus.copy)
-  
-  #doc.corpus <- as.VCorpus(doc.corpus.new)
   
   # Indicamos que nuestro corpus es un texto
   doc.corpus <- tm_map(doc.corpus, PlainTextDocument) 
@@ -281,6 +278,9 @@ Vamos a crear 2 nubes de palabras, una para lo de nivel bajo y otra para los de 
 wordcloud(df_freq_alto$word, df_freq_alto$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
 max.words=45, rot.per=0)
 
+wordcloud(df_freq_medio$word, df_freq_medio$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+max.words=45, rot.per=0)
+
 
 wordcloud(df_freq_bajo$word, df_freq_bajo$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
 max.words=45, rot.per=0)
@@ -319,8 +319,31 @@ correlaciones <- c(pol_likes$estimate,pol_commen$estimate,pol_react$estimate,pol
 
 names(correlaciones) <- c("likes", "commen", "react","share","engage")
 
+correlaciones
+
 ```
 
+Realizamos lo mismo para la subjetividad
+
+```{r}
+
+sub_likes <- cor.test(datos_sent_fil$subjectivity, datos_sent_fil$likes_count_fb)
+
+sub_commen <- cor.test(datos_sent_fil$subjectivity, datos_sent_fil$comments_count_fb)
+
+sub_react <- cor.test(datos_sent_fil$subjectivity, datos_sent_fil$reactions_count_fb)
+
+sub_share <- cor.test(datos_sent_fil$subjectivity, datos_sent_fil$shares_count_fb)
+
+sub_engag <- cor.test(datos_sent_fil$subjectivity, datos_sent_fil$engagement_fb)
+
+correlaciones_sub <- c(sub_likes$estimate,sub_commen$estimate,sub_react$estimate,sub_share$estimate,sub_engag$estimate)
+
+names(correlaciones_sub) <- c("likes", "commen", "react","share","engage")
+
+correlaciones_sub
+
+```
 
 ```{r}
 modelo_like <- lm(datos_sent_fil$polarity~datos_sent_fil$likes_count_fb)
@@ -440,3 +463,5 @@ ggplot(data = datos_status_fil1) +
 
 
 En el caso de la subjetividad el p-valor es de 0.09, por lo que no podemos concluir que sean estadísticamente significativas.
+
+
