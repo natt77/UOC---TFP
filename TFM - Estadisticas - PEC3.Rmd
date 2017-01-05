@@ -38,7 +38,7 @@ for(i in 1:length(file.names)){
   fdatos <- rbind(fdatos, file)
 }
 
-fsentim <-  read.csv("/resources/data/Sentiment_output_en.csv", header = TRUE, stringsAsFactors = FALSE,encoding = "ANSII", sep=";")
+fsentim <-  read.csv("/Users/Raul/Documents/R/tfm/Sentiment_output_en.csv", header = TRUE, stringsAsFactors = FALSE,encoding = "ANSII", sep=";")
 #seleccionamos solo las columnas que queremos para las estadisticas
 columnas <- c("type", "likes_count_fb", "comments_count_fb", "reactions_count_fb","shares_count_fb","engagement_fb")
 datos <- data.frame(fdatos[,columnas])
@@ -260,7 +260,7 @@ colnames(df_freq_alto)[3] <- "nivel"
 union_df_freq <- data.frame(rbind(df_freq_bajo,df_freq_medio,df_freq_alto))
 
                             
-filtrado <- data.frame(subset(union_df_freq, freq>5))
+filtrado <- data.frame(subset(union_df_freq, freq>40))
 
 p <- ggplot(filtrado, aes(word, freq, fill=factor(nivel)))  
 p <- p + geom_bar(stat="identity")   
@@ -270,7 +270,7 @@ p
 
 ```
 
-Vamos a crear 2 nubes de palabras, una para lo de nivel bajo y otra para los de nivel alto, para visualizar las diferencias entre ellos.
+Vamos a crear 3 nubes de palabras, una para cada nivel: alto, medio y bajo, para visualizar las diferencias entre ellos.
 ```{r}
 
 #nube de palabras
@@ -375,6 +375,37 @@ summary(modelo_engage)
 
 Para los modelos con likes, reacciones y shares tenemos un p-valor muy bajo, lo que nos lleva a rechazar la hipótesis nula que nos indica que las variables no son estadísiticamente significativas.
 
+Realizamos el mismo análisis para la subjetividad:
+
+
+
+```{r}
+modelo_like_sub <- lm(datos_sent_fil$subjectivity~datos_sent_fil$likes_count_fb)
+
+summary(modelo_like_sub)
+
+
+modelo_comment_sub <- lm(datos_sent_fil$subjectivity~datos_sent_fil$comments_count_fb)
+
+summary(modelo_comment_sub)
+
+
+
+modelo_react_sub <- lm(datos_sent_fil$subjectivity~datos_sent_fil$reactions_count_fb)
+
+summary(modelo_react_sub)
+
+
+modelo_shares_sub <- lm(datos_sent_fil$subjectivity~datos_sent_fil$shares_count_fb)
+
+summary(modelo_shares_sub)
+
+modelo_engage_sub <- lm(datos_sent_fil$subjectivity~datos_sent_fil$engagement_fb)
+
+summary(modelo_engage_sub)
+
+
+```
 
 ```{r}
 
@@ -463,5 +494,4 @@ ggplot(data = datos_status_fil1) +
 
 
 En el caso de la subjetividad el p-valor es de 0.09, por lo que no podemos concluir que sean estadísticamente significativas.
-
 
