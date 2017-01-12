@@ -495,3 +495,153 @@ ggplot(data = datos_status_fil1) +
 
 En el caso de la subjetividad el p-valor es de 0.09, por lo que no podemos concluir que sean estadísticamente significativas.
 
+
+
+Para terminar vamos a hacer uso de la fecha/hora en la que se realizó la intervención en Facebook para analizar si existe alguna relación entre las variables
+
+```{r}
+#Extraemos la fecha
+datos_sent$fecha <- as.Date(fdatos$post_published_sql)
+
+#Extraemos el dia de la semana
+datos_sent$dia_sem <- weekdays(datos_sent$fecha)
+
+#Extraemos la hora
+datos_sent$hora <-  strftime(fdatos$post_published_sql, format='%H')
+
+
+#Gráfico que muestra el engagement obtenido por día de la semana
+ggplot(data = datos_sent) + 
+   geom_boxplot(mapping = aes(x = dia_sem, y =   engagement_fb))+
+  xlab("dia semana") + ylab("engagement") 
+
+#Gráfico que muestra el engagement obtenido por hora del dia
+ggplot(data = datos_sent) + 
+   geom_boxplot(mapping = aes(x = hora, y =   engagement_fb))+
+  xlab("hora") + ylab("engagement")
+
+
+```
+
+Mediante esta visualización no podemos obtener demasiada información, busquemos mejor graficos que incluyan la frecuenca.
+
+```{r}
+
+#DF con la frecuencia por dia de la semena
+day_freq <- as.data.frame(base::table(datos_sent$dia_sem))
+
+#DF con la frecuencia por hora
+hour_freq <- as.data.frame(base::table(datos_sent$hora))
+
+
+#Gráfico que muestra la frecuencia de mensajes según el día de la semana
+p <- ggplot(day_freq, aes(Var1, Freq))  
+p <- p + geom_bar(stat="identity")   
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
+p 
+
+
+```
+Observamos que los lunes hay mayor nº de mensajes y los sábado es el día en el que menos hay. 
+
+```{r}
+
+#Gráfico que muestra la frecuencia de mensajes según la hora del día 
+p <- ggplot(hour_freq, aes(Var1, Freq))  
+p <- p + geom_bar(stat="identity")   
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
+p 
+
+```
+Según la hora del día también hay mucha variabilidad del nº de mensajes que se emiten.
+
+
+Incluimos el tipo de post para visualizar la frecuencia por cada día de la semana.
+
+```{r}
+
+
+#DF con la frecuencia por dia de la semena y tipo de post
+day_freq1 <- as.data.frame(base::table(datos_sent$dia_sem, datos_sent$type))
+
+#Gráfico que muestra la frecuencia de mensajes según el día de la semana y el tipo de post
+p <- ggplot(day_freq1, aes(Var1, Freq, fill=factor(Var2)))  
+p <- p + geom_bar(stat="identity")   
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
+p 
+```
+
+Veamos si hay alguna relación entre la polaridad y los dias/horas de la semana en los que se emiten los mensajes
+
+```{r}
+
+#Modelo que precide la polaridad en función del día de la semana y la hora
+mod <- lm(datos_sent$polarity ~ datos_sent$dia_sem + datos_sent$hora)
+
+summary(mod)
+
+
+```
+Obtenemos un p-valor muy pequeño lo que nos indica que las variables son estadísticamente significativas
+
+```{r}
+
+#Modelo que precide en engagement en función del día de la semana y la hora del día
+mod1 <- lm(datos_sent$engagement_fb ~ datos_sent$dia_sem + datos_sent$hora)
+
+
+summary(mod1)
+
+
+```
+Obtenemos un p-valor muy alto lo que nos indica que las variables no son estadísticamente significativas
+
+
+
+Vamos a calcular las medias de engagement y polaridad por dia de la semana y hora, para ver visualmente si hay alguna diferencia
+
+```{r}
+#Media de valores de engagement según el día de la semana
+media_eng_dia <- tapply(datos_sent$engagement_fb, datos_sent$dia_sem, mean)
+
+#Media de valores de engagement según la hora del día 
+media_eng_hora <- tapply(datos_sent$engagement_fb, datos_sent$hora, mean)
+
+#Media de la polaridad según el día de la semana
+media_pol_dia <- tapply(datos_sent$polarity, datos_sent$dia_sem, mean)
+
+#Media de valores de engagement según la hora del día
+media_pol_hora <- tapply(datos_sent$polarity, datos_sent$hora, mean)
+
+#Convertimos en DF
+media_eng_dia<-data.frame(media_eng_dia)
+media_eng_hora<-data.frame(media_eng_hora)
+media_pol_dia<-data.frame(media_pol_dia)
+media_pol_hora<-data.frame(media_pol_hora)
+
+#Grafico que muestra la media de engagement por día de la semana 
+p <- ggplot(media_eng_dia, aes(names(media_eng_dia), media_eng_dia)  )
+p <- p + geom_bar(stat="identity")   
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
+p
+
+#Grafico que muestra la media de engagement por hora del día 
+p <- ggplot(media_eng_hora, aes(names(media_eng_hora), media_eng_hora)  )
+p <- p + geom_bar(stat="identity")   
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
+p
+
+#Grafico que muestra la media de polaridad por día de la semana 
+p <- ggplot(media_pol_dia, aes(names(media_pol_dia), media_pol_dia)  )
+p <- p + geom_bar(stat="identity")   
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
+p
+
+#Grafico que muestra la media de polaridad por hora del día 
+p <- ggplot(media_pol_hora, aes(names(media_pol_hora), media_pol_hora)  )
+p <- p + geom_bar(stat="identity")   
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
+p
+```
+
+Estos graficos nos confirman lo que habíamos visto con los modelos, el engagement no parece afectado por la hora o el día de la semana, pero la polaridad de los mensajes si está influenciada por la hora y el dia.
