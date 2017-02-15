@@ -9,12 +9,12 @@ ArchivoAsociaciones20161128ANSII.txt --> Descarga mediante NETVIZZ de post de gr
 
 Analisis de sentimiento en Python:
 
-TFM - Analisis Sentimiento.ipynb --> código para realizar el análisis
+TFM - Analisis Sentimiento.ipynb --> código para realizar el análisis  
 Sentiment_output_en.csv --> salida del código + traducción mediante google translate
 
 Análisis de datos en R:
 
-TFM - Corpus --> leer ficheros, creación de corpus y visualización de frecuencias y nube de palabras.
+TFM - Corpus --> leer ficheros, creación de corpus y visualización de frecuencias y nube de palabras.  
 TFM - Estadisticas --> leer ficheros, medias por tipos de publicacion, creación de factor por estado, visualización de frecuencias y nube de palabras. Análisis variables temporales.
 
 
