@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ******
-#Cargamos librerías y leemos ficheros Facebook
+# Cargamos librerías y leemos ficheros Facebook
 ******
 
 
@@ -47,7 +47,7 @@ linea = iconv(linea, to="ASCII//TRANSLIT")
 
 
 ******
-#Creación del corpus de Facebook
+# Creación del corpus de Facebook
 ******
 
 ```{r}
@@ -131,7 +131,7 @@ max.words=45, rot.per=0)
 ```
 
 ******
-#Creación del corpus del Decálogo
+# Creación del corpus del Decálogo
 ******
 
 
@@ -295,7 +295,7 @@ comparison.cloud(unido_all_mat,scale=c(0.5,2.0),max.words=80,
 
 ```
 *******
-#Calculo tf-idf 
+# Cálculo tf-idf 
 *******
 ```{r}
 #leemos datos de facebook en una única variable
