@@ -220,7 +220,7 @@ corpus_tfidf <- tm_map(corpus_tfidf, PlainTextDocument)
 TDM_tfidf <-TermDocumentMatrix(corpus_tfidf,control = list(weighting = function(x) weightTfIdf(x, normalize = TRUE)))
 
 #reducimos la matriz de términos
-TDM_tfidf<- removeSparseTerms(TDM_tfidf, 0.995)
+TDM_tfidf<- removeSparseTerms(TDM_tfidf, 0.7)
 
 inspect(TDM_tfidf)
 
@@ -229,6 +229,7 @@ TDM_tfidf_mat<- as.matrix(TDM_tfidf)
 #creamos los df con las frecuencias de tfidf
 
 colnames(TDM_tfidf_mat) <- c("freq_bajo", "freq_medio", "freq_alto")
+
 word_tfidf_bajo <- data.frame(word=rownames(TDM_tfidf_mat), freq=TDM_tfidf_mat[,'freq_bajo'])
 word_tfidf_medio <- data.frame(word=rownames(TDM_tfidf_mat), freq=TDM_tfidf_mat[,'freq_medio'])
 word_tfidf_alto <- data.frame(word=rownames(TDM_tfidf_mat), freq=TDM_tfidf_mat[,'freq_alto'])
@@ -246,7 +247,7 @@ colnames(df_freq_alto)[3] <- "nivel"
 
 union_df_freq <- data.frame(rbind(df_freq_bajo,df_freq_medio,df_freq_alto))
 
-filtrado <- data.frame(subset(union_df_freq, freq>0.0035))
+filtrado <- data.frame(subset(union_df_freq, freq>0.001))
 
 p <- ggplot(filtrado, aes(word, freq, fill=factor(nivel)))  
 p <- p + geom_bar(stat="identity")   
@@ -260,15 +261,15 @@ p
 #nubes de palabras
 
 wordcloud(word_tfidf_bajo$word, word_tfidf_bajo$freq, scale=c(3,0.5), random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
-max.words=45, rot.per=0)
+max.words=40, rot.per=0)
 
 
 wordcloud(word_tfidf_medio$word, word_tfidf_medio$freq, scale=c(3,0.5), random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
-max.words=45, rot.per=0)
+max.words=40, rot.per=0)
 
 
 wordcloud(word_tfidf_alto$word, word_tfidf_alto$freq, scale=c(3,0.5), random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
-max.words=45, rot.per=0)
+max.words=40, rot.per=0)
 ```
 
 
