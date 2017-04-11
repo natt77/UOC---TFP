@@ -192,66 +192,53 @@ linea_medio = iconv(linea_medio, to="ASCII//TRANSLIT")
 linea_alto = iconv(linea_alto, to="ASCII//TRANSLIT")
 
 
-# Función que limpiará el corpus
-fun_corpus <- function(x) {
-  #creamos corpus
-  doc.corpus <- Corpus(VectorSource(x))
-  # Vamos a ir eliminando/modificando el corpus para quedarnos solo con     las palabras necesarias 
-  # Transformamos a minÃºsculas
-  doc.corpus <- tm_map(doc.corpus, content_transformer(tolower)) 
-  # Quitamos la puntuaciÃ³n
-  doc.corpus <- tm_map(doc.corpus, removePunctuation) 
-  # Quitamos nÃºmeros
-  doc.corpus <- tm_map(doc.corpus, removeNumbers)
-  # Quitamos espacios en blanco
-  doc.corpus <- tm_map(doc.corpus, stripWhitespace)
-  # Quitamos palabras sin valor analitico, en ingles y espaÃ±ol
-  doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("spanish")) 
-  doc.corpus <- tm_map(doc.corpus, removeWords, stopwords("english"))  
-  # Palabras especificas
-  # revisar, añadirlas a un fichero
-  doc.corpus <- tm_map(doc.corpus, removeWords, c("vomitos","asociacion",   "enfermedad","sindrome","marfan","moebius","mas","asi","raras","wolfram"))   
-  
-  # Indicamos que nuestro corpus es un texto
-  doc.corpus <- tm_map(doc.corpus, PlainTextDocument) 
-  
-  # Creamos una matriz de terminos - documentos
-  TDM <- TermDocumentMatrix(doc.corpus)
-  
-  
-return(TDM)  
-}
+# vamos a crear un corpus único con los documentos de las 3 clases (alta, media y baja). Lo utilizaremos para calcular el tfidf y después mostrar las nubes de palabras
 
 
-#Aplicamos a cada uno de los postmensajes la función para convertirlo en un corpus y limpiarlo
-TDM_bajo <- fun_corpus(linea_bajo)
-TDM_medio <- fun_corpus(linea_medio)
-TDM_alto <- fun_corpus(linea_alto)
+lineas_all<- list(linea_bajo, linea_medio, linea_alto)
+corpus_tfidf <- Corpus(VectorSource(lineas_all))
 
-#Reducimos el nº de ceros de la matriz de términos
-TDM_bajo <- removeSparseTerms(TDM_bajo, 0.995)
-TDM_medio <- removeSparseTerms(TDM_medio, 0.995)
-TDM_alto <- removeSparseTerms(TDM_alto, 0.995)
+corpus_tfidf <- tm_map(corpus_tfidf, content_transformer(tolower)) 
+# Quitamos la puntuacion
+corpus_tfidf <- tm_map(corpus_tfidf, removePunctuation) 
+# Quitamos numeros
+corpus_tfidf <- tm_map(corpus_tfidf, removeNumbers)
+# Quitamos espacios en blanco
+corpus_tfidf <- tm_map(corpus_tfidf, stripWhitespace)
+# Quitamos palabras sin valor analitico, en ingles y espaÃ±ol
+corpus_tfidf <- tm_map(corpus_tfidf, removeWords, stopwords("spanish")) 
+corpus_tfidf <- tm_map(corpus_tfidf, removeWords, stopwords("english"))  
+# Palabras especificas
+# revisar, añadirlas a un fichero
+corpus_tfidf <- tm_map(corpus_tfidf, removeWords, c("vomitos","asociacion", "enfermedad","sindrome","marfan","moebius","mas","asi","raras","wolfram"))   
+# sustituimos palabras derivadas 
+
+# Indicamos que nuestro corpus es un texto
+corpus_tfidf <- tm_map(corpus_tfidf, PlainTextDocument) 
+
+# Creamos una matriz de terminos - documentos determinando que la frecuencia será tfidf
+TDM_tfidf <-TermDocumentMatrix(corpus_tfidf,control = list(weighting = function(x) weightTfIdf(x, normalize = TRUE)))
+
+#reducimos la matriz de términos
+TDM_tfidf<- removeSparseTerms(TDM_tfidf, 0.995)
+
+inspect(TDM_tfidf)
+
+TDM_tfidf_mat<- as.matrix(TDM_tfidf)
+
+#creamos los df con las frecuencias de tfidf
+
+colnames(TDM_tfidf_mat) <- c("freq_bajo", "freq_medio", "freq_alto")
+word_tfidf_bajo <- data.frame(word=rownames(TDM_tfidf_mat), freq=TDM_tfidf_mat[,'freq_bajo'])
+word_tfidf_medio <- data.frame(word=rownames(TDM_tfidf_mat), freq=TDM_tfidf_mat[,'freq_medio'])
+word_tfidf_alto <- data.frame(word=rownames(TDM_tfidf_mat), freq=TDM_tfidf_mat[,'freq_alto'])
 
 
-#Definimos función
-
-fun_matriz <- function(x){
-TDM_matrix<-as.matrix(x)
-frecuencia <- sort(rowSums(TDM_matrix), decreasing=TRUE)
-palab_frec.df <- data.frame(word=names(frecuencia), freq=frecuencia)
-
-return(palab_frec.df)
-}
-
-df_freq_bajo <- fun_matriz(TDM_bajo)
-df_freq_medio <- fun_matriz(TDM_medio)
-df_freq_alto <- fun_matriz(TDM_alto)
-
+# histograma de frecuencias
 #Añadimos una columna que nos indica la nueva categoria
-df_freq_bajo <- data.frame(df_freq_bajo,"bajo")
-df_freq_medio <- data.frame(df_freq_medio,"medio")
-df_freq_alto <- data.frame(df_freq_alto,"alto")
+df_freq_bajo <- data.frame(word_tfidf_bajo,"bajo")
+df_freq_medio <- data.frame(word_tfidf_medio,"medio")
+df_freq_alto <- data.frame(word_tfidf_alto,"alto")
 
 colnames(df_freq_bajo)[3] <- "nivel"
 colnames(df_freq_medio)[3] <- "nivel"
@@ -259,33 +246,31 @@ colnames(df_freq_alto)[3] <- "nivel"
 
 union_df_freq <- data.frame(rbind(df_freq_bajo,df_freq_medio,df_freq_alto))
 
-                            
-filtrado <- data.frame(subset(union_df_freq, freq>40))
+filtrado <- data.frame(subset(union_df_freq, freq>0.0035))
 
 p <- ggplot(filtrado, aes(word, freq, fill=factor(nivel)))  
 p <- p + geom_bar(stat="identity")   
 p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
 p 
-
-
 ```
 
-Vamos a crear 3 nubes de palabras, una para cada nivel: alto, medio y bajo, para visualizar las diferencias entre ellos.
+
 ```{r}
+#Vamos a crear 3 nubes de palabras, una para cada nivel, para visualizar las diferencias entre ellos.
+#nubes de palabras
 
-#nube de palabras
-
-wordcloud(df_freq_alto$word, df_freq_alto$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
-max.words=45, rot.per=0)
-
-wordcloud(df_freq_medio$word, df_freq_medio$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+wordcloud(word_tfidf_bajo$word, word_tfidf_bajo$freq, scale=c(3,0.5), random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
 max.words=45, rot.per=0)
 
 
-wordcloud(df_freq_bajo$word, df_freq_bajo$freq, random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+wordcloud(word_tfidf_medio$word, word_tfidf_medio$freq, scale=c(3,0.5), random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
 max.words=45, rot.per=0)
 
+
+wordcloud(word_tfidf_alto$word, word_tfidf_alto$freq, scale=c(3,0.5), random.color=FALSE,random.order = FALSE, colors=colorRampPalette(brewer.pal(6,"Blues"))(32),
+max.words=45, rot.per=0)
 ```
+
 
 
 ******
