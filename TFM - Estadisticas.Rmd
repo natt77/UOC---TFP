@@ -601,12 +601,12 @@ datos_sent$hora <-  strftime(fdatos$post_published_sql, format='%H')
 #Gráfico que muestra el engagement obtenido por día de la semana
 ggplot(data = datos_sent) + 
    geom_boxplot(mapping = aes(x = dia_sem, y =   engagement_fb))+
-  xlab("dia semana") + ylab("engagement") 
+  xlab("Day of week") + ylab("Engagement") 
 
 #Gráfico que muestra el engagement obtenido por hora del dia
 ggplot(data = datos_sent) + 
    geom_boxplot(mapping = aes(x = hora, y =   engagement_fb))+
-  xlab("hora") + ylab("engagement")
+  xlab("Hour") + ylab("Engagement")
 
 
 ```
@@ -628,7 +628,7 @@ day_freq$Var1 <- factor(day_freq$Var1, levels = day_freq$Var1[order(day_freq$Fre
 #Gráfico que muestra la frecuencia de mensajes según el día de la semana
 p <- ggplot(day_freq, aes(Var1, Freq))  
 p <- p + geom_bar(stat="identity")   
-p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Dia") + ylab("Frecuencia")  
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Day") + ylab("Frequency")  
 p 
 
 
@@ -641,7 +641,7 @@ Observamos que los lunes hay mayor nº de mensajes y los sábado es el día en e
 p <- ggplot(hour_freq, aes(Var1, Freq))  
 p <- p + geom_bar(stat="identity")   
 p <- p + theme(axis.text.x=element_text(angle=45, hjust=1))   
-p <- p + xlab("Hora") + ylab("Frecuencia")
+p <- p + xlab("Hour") + ylab("Frequency")
 p
 ```
 Según la hora del día también hay mucha variabilidad del nº de mensajes que se emiten.
@@ -663,8 +663,8 @@ day_freq1$Var1 <- factor(day_freq1$Var1, levels = day_freq1$Var1[order(day_freq$
 #Gráfico que muestra la frecuencia de mensajes según el día de la semana y el tipo de post
 p <- ggplot(day_freq1, aes(Var1, Freq, fill=factor(Var2)))  
 p <- p + geom_bar(stat="identity")   
-p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) +xlab("Dia")+ylab("Frecuencia")
-p$labels$fill <- "Tipo de Post" 
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) +xlab("Day")+ylab("Frequency")
+p$labels$fill <- "Type of Post" 
 p 
 ```
 
@@ -673,10 +673,10 @@ Veamos si hay alguna relación entre la polaridad y los dias/horas de la semana 
 
 En primer lugar vamos a transformar la variable hora para crear 4 intervalos de 6 horas cada uno, ya que será más sencillo de esta forma encontrar alguna relación.
 ```{r}
-datos_sent$hora_int[(datos_sent$hora<="12") & (datos_sent$hora>"06") ] <- "mañana" 
-datos_sent$hora_int[(datos_sent$hora<="18") & (datos_sent$hora>"12") ] <- "tarde" 
-datos_sent$hora_int[(datos_sent$hora<="24") & (datos_sent$hora>"18") ] <- "noche"
-datos_sent$hora_int[(datos_sent$hora<="06") & (datos_sent$hora>"00")] <- "madrugada"
+datos_sent$hora_int[(datos_sent$hora<="12") & (datos_sent$hora>"06") ] <- "morning" 
+datos_sent$hora_int[(datos_sent$hora<="18") & (datos_sent$hora>"12") ] <- "evening" 
+datos_sent$hora_int[(datos_sent$hora<="24") & (datos_sent$hora>"18") ] <- "night"
+datos_sent$hora_int[(datos_sent$hora<="06") & (datos_sent$hora>"00")] <- "late night"
 
 datos_sent$hora_int<-as.factor(datos_sent$hora_int)
 ```
@@ -758,28 +758,28 @@ media_pol_hora<-data.frame(media_pol_hora)
 #Grafico que muestra la media de engagement por día de la semana 
 p <- ggplot(media_eng_dia, aes(names(media_eng_dia), media_eng_dia)  )
 p <- p + geom_bar(stat="identity")   
-p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Dia") + ylab("Engagement medio")  
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Day") + ylab("Mean Engagement")  
 p
 
 #Grafico que muestra la media de engagement por hora del día 
 p <- ggplot(media_eng_hora, aes(names(media_eng_hora), media_eng_hora)  )
 p <- p + geom_bar(stat="identity")   
-p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Hora")  +
-ylab("Engagement medio")  
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Hour")  +
+ylab("Mean Engagement")  
 p
 
 #Grafico que muestra la media de polaridad por día de la semana 
 p <- ggplot(media_pol_dia, aes(names(media_pol_dia), media_pol_dia)  )
 p <- p + geom_bar(stat="identity")   
-p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Dia")+
-ylab("Polaridad media")  
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Day")+
+ylab("Mean Polarity")  
 p
 
 #Grafico que muestra la media de polaridad por hora del día 
 p <- ggplot(media_pol_hora, aes(names(media_pol_hora), media_pol_hora)  )
 p <- p + geom_bar(stat="identity")   
-p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Hora")+
-ylab("Polaridad media")  
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Hour")+
+ylab("Mean Polarity")  
 p
 ```
 Hacemos lo mismo pero considerando la hora ya agrupada en intervalos
@@ -801,17 +801,16 @@ media_pol_hora_int<-data.frame(media_pol_hora_int)
 #Grafico que muestra la media de polaridad por hora del día 
 p <- ggplot(media_pol_hora_int, aes(names(media_pol_hora_int), media_pol_hora_int)  )
 p <- p + geom_bar(stat="identity")   
-p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Intervalo Hora")+
-ylab("Polaridad media")  
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Hour Interval")+
+ylab("Mean Polarity")  
 p
 
 #Grafico que muestra la media de engagement por hora del día 
 p <- ggplot(media_eng_hora_int, aes(names(media_eng_hora_int), media_eng_hora_int)  )
 p <- p + geom_bar(stat="identity")   
-p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Intervalo Hora")  +
-ylab("Engagement medio")  
+p <- p + theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Hour Interval")  +
+ylab("Mean Engagement")  
 p
 
 
 ```
-
