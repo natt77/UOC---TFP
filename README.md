@@ -2,6 +2,10 @@
 Trabajo fin posgrado
 ---------------------
 
+Los resultados de este trabajo se han publicado en:
+
+Reguera, N., Subirats, L., Armayones, M. Mining Facebook data of people with rare diseases. IEEE Computer-Based Medical Systems (IEEE CBMS 2017), Thessaloniki, Greece, 22-24th June, 2017.
+
 Archivos de entrada:     
 
 decalogodeprioridades.txt -->Descarga en txt de decálogo de priroridades de FEDER desde su pagina web
