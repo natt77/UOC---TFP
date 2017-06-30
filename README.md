@@ -2,7 +2,7 @@
 Trabajo fin posgrado
 ---------------------
 
-Los resultados de este trabajo se han publicado en:
+Los resultados de este trabajo se han publicado en la siguiente conferencia, por favor si haces uso de estos archivos y/o código, cítanos:
 
 Reguera, N., Subirats, L., Armayones, M. Mining Facebook data of people with rare diseases. IEEE Computer-Based Medical Systems (IEEE CBMS 2017), Thessaloniki, Greece, 22-24th June, 2017.
 
