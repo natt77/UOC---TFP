@@ -9,7 +9,7 @@ Reguera, N., Subirats, L., Armayones, M. Mining Facebook data of people with rar
 Archivos de entrada:     
 
 decalogodeprioridades.txt -->Descarga en txt de decálogo de priroridades de FEDER desde su pagina web
-ArchivoAsociaciones20161128ANSII.txt --> Descarga mediante NETVIZZ de post de grupos de asociaciones con enfermedades raras
+ArchivoAsociaciones20161128ANSII.txt --> Descarga mediante NETVIZZ de post de grupos de asociaciones con enfermedades raras. (28/03/2018: fichero eliminado ya que puede contener datos sensibles relacionados con la salud)
 
 Analisis de sentimiento en Python:
 
