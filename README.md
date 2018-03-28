@@ -14,7 +14,7 @@ ArchivoAsociaciones20161128ANSII.txt --> Descarga mediante NETVIZZ de post de gr
 Analisis de sentimiento en Python:
 
 TFM - Analisis Sentimiento.ipynb --> código para realizar el análisis  
-Sentiment_output_en.csv --> salida del código + traducción mediante google translate
+Sentiment_output_en.csv --> salida del código + traducción mediante google translate. (28/03/2018: fichero eliminado ya que puede contener datos sensibles relacionados con la salud)
 
 Análisis de datos en R:
 
